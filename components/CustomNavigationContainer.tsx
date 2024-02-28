@@ -12,7 +12,15 @@ const CustomNavigationContainer = ({ children }) => {
             <View style={styles.navigator}>
                 <View style={styles.sidebar}>
                     <NavigationButton
+                        screenName={"Home"}
                         name="home"
+                        size={32}
+                        color="white"
+                        navigation={navigation}
+                    />
+                    <NavigationButton
+                        screenName={"Search"}
+                        name="search"
                         size={32}
                         color="white"
                         navigation={navigation}

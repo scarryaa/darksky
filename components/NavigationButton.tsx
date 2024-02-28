@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Pressable } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-const NavigationButton = ({ name, size, color, navigation }) => {
+const NavigationButton = ({ name, size, color, navigation, screenName }) => {
     const [isHovered, setIsHovered] = useState(false);
 
     const handleHoverIn = () => {
@@ -14,7 +14,7 @@ const NavigationButton = ({ name, size, color, navigation }) => {
     };
 
     const handleButtonPress = () => {
-        navigation.navigate('Home');
+        navigation.navigate(screenName);
     };
 
     return (
