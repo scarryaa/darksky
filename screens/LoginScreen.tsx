@@ -4,7 +4,7 @@ import { agent } from '../services/api';
 import { useAuthStatus } from '../hooks/useAuthStatus';
 import { AuthContext } from '../contexts/AuthContext';
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const { signIn } = React.useContext(AuthContext);

@@ -3,16 +3,15 @@ import { View, Text, StyleSheet } from 'react-native';
 import Post from '../components/Post';
 import { agent } from '../services/api';
 
-const HomeScreen = ({ navigation }) => {
-    const [feeds, setFeeds] = useState([]);
+const HomeScreen = () => {
+    const [timeline, setTimeline] = useState([]);
 
     useEffect(() => {
         const fetchFeeds = async () => {
             try {
-                const response = await agent.app.bsky.unspecced.getPopularFeedGenerators({
-                    limit: 10,
-                });
-                setFeeds(response.data.feeds);
+                const response = await agent.app.bsky.feed.getTimeline({ limit: 50 });
+                setTimeline(response.data.feed);
+                console.log(response.data.feed);
             } catch (error) {
                 console.error('Error fetching feeds:', error);
             }
@@ -23,12 +22,24 @@ const HomeScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <ul>
-                {feeds.map((feed) => (
-                    <li key={feed.displayName}>{feed.displayName}</li>
+            {/* @ts-ignore */}
+            <ul style={styles.postList}>
+                {timeline.map((post) => (
+                    <li key={post.post.cid}>
+                        <Post
+                            repostedBy={post.reason?.by?.displayName}
+                            isRepost={post.reason?.$type == "app.bsky.feed.defs#reasonRepost"}
+                            displayName={post.post.author.displayName}
+                            username={post.post.author.handle}
+                            content={post.post.record.text}
+                            timestamp={post.post.indexedAt}
+                            avatar={post.post.author.avatar}
+                        />
+                    </li>
                 ))}
+
             </ul>
-        </View>
+        </View >
     );
 };
 
@@ -36,6 +47,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
+    },
+    postList: {
+        width: '100%',
+        // @ts-ignore
+        overflow: 'auto',
+        margin: 0,
+        padding: 0,
     },
     title: {
         fontSize: 24,

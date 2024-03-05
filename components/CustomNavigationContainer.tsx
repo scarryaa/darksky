@@ -1,32 +1,47 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { NavigationContainer, useNavigation } from '@react-navigation/native'; // Import useNavigation
+import { View, StyleSheet, useWindowDimensions } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import NavigationButton from './NavigationButton';
 
-const CustomNavigationContainer = ({ children }) => {
+const CustomNavigationContainer = ({ children, sidebarVisible }) => {
     const navigation = useNavigation();
+    const windowWidth = useWindowDimensions().width;
+    const windowHeight = useWindowDimensions().height;
 
     return (
         <View style={styles.container}>
-            <View style={styles.navigator}>
+            {sidebarVisible ? <View style={styles.navigator}>
                 <View style={styles.sidebar}>
                     <NavigationButton
+                        active={true}
+                        activeName={"home"}
                         screenName={"Home"}
-                        name="home"
-                        size={32}
-                        color="white"
+                        name="home-outline"
+                        size={28}
+                        color="black"
                         navigation={navigation}
                     />
                     <NavigationButton
+                        active={false}
+                        activeName={"search"}
                         screenName={"Search"}
-                        name="search"
-                        size={32}
-                        color="white"
+                        name="search-outline"
+                        size={28}
+                        color="black"
+                        navigation={navigation}
+                    />
+                    <NavigationButton
+                        active={false}
+                        activeName={"settings"}
+                        screenName={"Settings"}
+                        name="settings-outline"
+                        size={28}
+                        color="black"
                         navigation={navigation}
                     />
                 </View>
-            </View>
+            </View> : <></>}
             <View style={styles.content}>
                 {children}
             </View>
@@ -40,7 +55,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     navigator: {
-        width: 250,
+        width: 80,
         backgroundColor: '#fff',
         borderRightWidth: 1,
         borderRightColor: '#ccc',
@@ -48,7 +63,7 @@ const styles = StyleSheet.create({
     sidebar: {
         flex: 1,
         paddingTop: 50,
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
         justifyContent: 'flex-start',
     },
     content: {

@@ -3,9 +3,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen';
-import { useAuthStatus } from './hooks/useAuthStatus';
 import { agent } from './services/api';
 import { AuthContext } from './contexts/AuthContext';
+import CustomNavigationContainer from './components/CustomNavigationContainer';
+import SearchScreen from './screens/SearchScreen';
+import SettingsScreen from './screens/SettingsScreen';
 
 const Stack = createStackNavigator();
 
@@ -45,15 +47,21 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      <AuthContext.Provider value={authContext}>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          {state.isLoggedIn ? (
-            <Stack.Screen name="Home" component={HomeScreen} />
-          ) : (
-            <Stack.Screen name="Login" component={LoginScreen} />
-          )}
-        </Stack.Navigator>
-      </AuthContext.Provider>
+      <CustomNavigationContainer sidebarVisible={state.isLoggedIn}>
+        <AuthContext.Provider value={authContext}>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            {state.isLoggedIn ? (
+              <>
+                <Stack.Screen name="Home" component={HomeScreen} />
+                <Stack.Screen name="Search" component={SearchScreen} />
+                <Stack.Screen name="Settings" component={SettingsScreen} />
+              </>
+            ) : (
+              <Stack.Screen name="Login" component={LoginScreen} />
+            )}
+          </Stack.Navigator>
+        </AuthContext.Provider>
+      </CustomNavigationContainer>
     </NavigationContainer>
   );
 };

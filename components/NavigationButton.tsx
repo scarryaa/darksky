@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Pressable } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-const NavigationButton = ({ name, size, color, navigation, screenName }) => {
+const NavigationButton = ({ name, active, activeName, size, color, navigation, screenName }) => {
     const [isHovered, setIsHovered] = useState(false);
 
     const handleHoverIn = () => {
@@ -30,7 +30,7 @@ const NavigationButton = ({ name, size, color, navigation, screenName }) => {
             >
                 <Ionicons
                     backgroundColor="transparent"
-                    name={name}
+                    name={active ? activeName : name}
                     size={size}
                     color={color}
                 />
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
     },
     navigationButton: {
-        padding: 20,
+        padding: 14,
         borderRadius: 10,
         justifyContent: 'center',
         alignItems: 'center',
