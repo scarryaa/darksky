@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, StyleSheet } from 'react-native';
 import Post from '../components/Post';
 import { agent } from '../services/api';
+import { ThemeContext } from '../contexts/ThemeContext';
 
 const HomeScreen = () => {
     const [timeline, setTimeline] = useState([]);
+    const { theme } = useContext(ThemeContext);
 
     useEffect(() => {
         const fetchFeeds = async () => {
@@ -21,7 +23,7 @@ const HomeScreen = () => {
     }, []);
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: theme.colors.primary }]}>
             {/* @ts-ignore */}
             <ul style={styles.postList}>
                 {timeline.map((post) => (
@@ -46,7 +48,6 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
     },
     postList: {
         width: '100%',
