@@ -12,7 +12,7 @@ import { PostContext } from '../../../contexts/PostContext';
 
 type Props = {
     post: AppBskyFeedDefs.PostView;
-    reason: AppBskyFeedDefs.ReasonRepost | undefined;
+    reason?: AppBskyFeedDefs.ReasonRepost | undefined;
 }
 
 const Post = ({ post, reason }: Props) => {
