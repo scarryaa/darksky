@@ -7,15 +7,17 @@ import { ThemeContext } from "../contexts/ThemeContext";
 import { agent } from "../services/api";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { CommonNavParams } from "../routes/types";
-import { AppBskyFeedGetPostThread } from "@atproto/api";
+import { AppBskyFeedDefs, AppBskyFeedGetPostThread } from "@atproto/api";
 import { makeRecordUri } from "../strings/helpers";
+import PostDetail from "../components/com/post/PostDetail";
+import { PostView, ThreadViewPost } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 
 type Props = NativeStackScreenProps<CommonNavParams, 'PostThread'>
 type ThreadViewNode = AppBskyFeedGetPostThread.OutputSchema['thread'];
 
 const PostThreadScreen = ({ route }: Props) => {
     const { theme } = useContext(ThemeContext);
-    const [posts, setPosts] = useState({} as ThreadViewNode);
+    const [posts, setPosts] = useState<ThreadViewPost>();
     const { name, rkey } = route.params;
     const uri = makeRecordUri(name, 'app.bsky.feed.post', rkey);
 
@@ -23,8 +25,9 @@ const PostThreadScreen = ({ route }: Props) => {
         const fetchPosts = async () => {
             try {
                 const response = await agent.app.bsky.feed.getPostThread({ uri: uri });
-                console.log(response.data.thread);
-                setPosts(response.data.thread);
+                if (AppBskyFeedDefs.isThreadViewPost(response.data.thread)) {
+                    setPosts(response.data.thread);
+                }
             } catch (error) {
                 console.error('Error fetching posts:', error);
             }
@@ -32,6 +35,8 @@ const PostThreadScreen = ({ route }: Props) => {
 
         fetchPosts();
     }, []);
+
+    if (!posts) return <View>loading</View>;
 
     return (
         <View style={[styles.container, { backgroundColor: theme.colors.primary }]}>
@@ -41,6 +46,9 @@ const PostThreadScreen = ({ route }: Props) => {
                 </Text>
             </ViewHeader>
             <BasicView>
+                <PostDetail
+                    post={posts.post}
+                />
             </BasicView>
         </View>
     );

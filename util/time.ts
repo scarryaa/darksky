@@ -30,3 +30,29 @@ export const ago = (date: number | string | Date): string => {
         return `${seconds}s`;
     }
 };
+
+export const agoLong = (date: number | string | Date): string => {
+    let ts: number;
+
+    if (typeof date === 'string') {
+        ts = Number(new Date(date));
+    } else if (date instanceof Date) {
+        ts = date.getTime();
+    } else {
+        ts = date;
+    }
+
+    const newDate = new Date(ts);
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const month = monthNames[newDate.getMonth()];
+    const day = newDate.getDate();
+    const year = newDate.getFullYear();
+    let hour = newDate.getHours();
+    const minute = newDate.getMinutes();
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+
+    hour = hour % 12;
+    hour = hour ? hour : 12;
+
+    return `${month} ${day}, ${year} at ${hour}:${minute.toString().padStart(2, '0')} ${ampm}`;
+};

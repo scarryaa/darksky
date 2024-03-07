@@ -8,10 +8,11 @@ type LinkProps = {
     link: string;
     children: React.ReactNode;
     style?: StyleProp<ViewStyle>;
+    hoverUnderline: boolean;
 };
 
-const Link: React.FC<LinkProps> = ({ link, children, style }) => {
-    const [IsHovered, setIsHovered] = useState(false);
+const Link: React.FC<LinkProps> = ({ link, children, style, hoverUnderline = true }) => {
+    const [isHovered, setIsHovered] = useState(false);
     const navigation = useNavigation<NavigationProp>();
 
     const handlePressIn = () => {
@@ -33,7 +34,7 @@ const Link: React.FC<LinkProps> = ({ link, children, style }) => {
             onHoverOut={handlePressOut}
             onPress={handlePress}
         >
-            <Text style={[style, { textDecorationLine: IsHovered ? 'underline' : 'none' }]}>
+            <Text style={[style, { textDecorationLine: (isHovered && hoverUnderline) ? 'underline' : 'none' }]}>
                 {children}
             </Text>
         </Pressable>

@@ -16,6 +16,11 @@ const typography: Typography = {
         letterSpacing: 0.25,
         fontWeight: '400',
     },
+    'md-bold': {
+        fontSize: 15,
+        letterSpacing: 0.25,
+        fontWeight: 'bold',
+    },
     md: {
         fontSize: 15,
         letterSpacing: 0.25,

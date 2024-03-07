@@ -14,7 +14,7 @@ const LoginScreen = () => {
             if (res.success) {
                 signIn({ username, password })
             } else {
-                console.log("Login failed");
+                console.error("Login failed");
             }
         });
     };

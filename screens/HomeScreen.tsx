@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import Post from '../components/Post';
+import Post from '../components/com/post/Post';
 import { agent } from '../services/api';
 import { ThemeContext } from '../contexts/ThemeContext';
 import BasicView from '../components/BasicView';
@@ -14,9 +14,8 @@ const HomeScreen = () => {
             try {
                 const response = await agent.app.bsky.feed.getTimeline({ limit: 50 });
                 setTimeline(response.data.feed);
-                console.log(response.data.feed);
             } catch (error) {
-                console.error('Error fetching feeds:', error);
+                console.error('Error fetching feeds: ', error);
             }
         };
 
@@ -32,6 +31,7 @@ const HomeScreen = () => {
                         <li key={post.post.cid}>
                             <Post
                                 post={post.post}
+                                reason={post.reason}
                             />
                         </li>
                     ))}

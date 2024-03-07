@@ -33,6 +33,7 @@ export type TypographyVariant =
     'header' |
     'xl' |
     'lg' |
+    'md-bold' |
     'md' |
     'sm' |
     'sm-bold' |
