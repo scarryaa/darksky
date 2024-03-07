@@ -3,8 +3,11 @@ import { lightTheme, darkTheme } from '../theme/themes';
 import { TextStyle } from 'react-native';
 
 export interface Theme {
+    theme: 'light' | 'dark' | 'dim',
     colors: {
         primary: string;
+        primary_dark: string;
+        primary_light: string;
         secondary: string;
         border: string;
         text: string;

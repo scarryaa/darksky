@@ -48,8 +48,8 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      <CustomNavigationContainer sidebarVisible={state.isLoggedIn}>
-        <ThemeProvider>
+      <ThemeProvider>
+        <CustomNavigationContainer sidebarVisible={state.isLoggedIn}>
           <AuthContext.Provider value={authContext}>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
               {state.isLoggedIn ? (
@@ -63,8 +63,8 @@ const App = () => {
               )}
             </Stack.Navigator>
           </AuthContext.Provider>
-        </ThemeProvider>
-      </CustomNavigationContainer>
+        </CustomNavigationContainer>
+      </ThemeProvider>
     </NavigationContainer>
   );
 };

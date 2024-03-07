@@ -12,10 +12,11 @@ const Text: React.FC<CustomTextProps> = ({ lineHeight, children, type = 'md', st
     const { theme } = useContext(ThemeContext);
     const typography = theme.typography[type];
     const lineHeightStyle = { lineHeight: lineHeight ? 1 : undefined };
+    const color = { color: theme.colors.text };
 
     return (
         <RNText
-            style={[typography, lineHeightStyle, style]}
+            style={[typography, lineHeightStyle, color, style]}
             {...props}>
             {children}
         </RNText>

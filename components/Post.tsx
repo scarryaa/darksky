@@ -1,11 +1,15 @@
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import React, { useContext, useEffect } from 'react';
+import { View, StyleSheet, Image } from 'react-native';
 import { AppBskyRichtextFacet, RichText } from '@atproto/api';
 import { agent } from '../services/api';
+import Text from './Text';
 import Link from '../components/Link';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { ThemeContext } from '../contexts/ThemeContext';
 
 const Post = ({ displayName, username, content, timestamp, avatar, isRepost, repostedBy }) => {
+    const { theme } = useContext(ThemeContext);
+
     const rt = new RichText({
         text: content,
     });
@@ -38,7 +42,7 @@ const Post = ({ displayName, username, content, timestamp, avatar, isRepost, rep
     }, [content]);
 
     return (
-        <View style={styles.postContainer}>
+        <View style={[styles.postContainer, { borderColor: theme.colors.border }]}>
             {isRepost ? <Text style={styles.repostTag}>Reposted by {repostedBy}</Text> : <></>}
             <View style={styles.container}>
                 <Image source={{ uri: avatar }} style={styles.avatar} />
@@ -93,7 +97,6 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderRightWidth: 1,
         borderLeftWidth: 1,
-        borderColor: '#E0E0E0',
         marginLeft: 'auto',
         marginRight: 'auto',
         maxWidth: 600,

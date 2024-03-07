@@ -1,17 +1,22 @@
-import React from 'react';
-import { View, StyleSheet, useWindowDimensions } from 'react-native';
+import React, { useContext } from 'react';
+import { View, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import NavigationButton from './NavigationButton';
+import { ThemeContext } from '../contexts/ThemeContext';
 
 const CustomNavigationContainer = ({ children, sidebarVisible }) => {
     const navigation = useNavigation();
-    const windowWidth = useWindowDimensions().width;
-    const windowHeight = useWindowDimensions().height;
+    const { theme } = useContext(ThemeContext);
 
     return (
         <View style={styles.container}>
-            {sidebarVisible ? <View style={styles.navigator}>
+            {sidebarVisible ? <View style={
+                [
+                    styles.navigator,
+                    { backgroundColor: theme.colors.primary },
+                    { borderColor: theme.colors.border }
+                ]}>
                 <View style={styles.sidebar}>
                     <NavigationButton
                         active={true}
@@ -19,7 +24,7 @@ const CustomNavigationContainer = ({ children, sidebarVisible }) => {
                         screenName={"Home"}
                         name="home-outline"
                         size={28}
-                        color="black"
+                        color={theme.colors.text}
                         navigation={navigation}
                     />
                     <NavigationButton
@@ -28,7 +33,7 @@ const CustomNavigationContainer = ({ children, sidebarVisible }) => {
                         screenName={"Search"}
                         name="search-outline"
                         size={28}
-                        color="black"
+                        color={theme.colors.text}
                         navigation={navigation}
                     />
                     <NavigationButton
@@ -37,7 +42,7 @@ const CustomNavigationContainer = ({ children, sidebarVisible }) => {
                         screenName={"Settings"}
                         name="settings-outline"
                         size={28}
-                        color="black"
+                        color={theme.colors.text}
                         navigation={navigation}
                     />
                 </View>
@@ -56,9 +61,7 @@ const styles = StyleSheet.create({
     },
     navigator: {
         width: 80,
-        backgroundColor: '#fff',
         borderRightWidth: 1,
-        borderRightColor: '#ccc',
     },
     sidebar: {
         flex: 1,

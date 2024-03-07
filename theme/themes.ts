@@ -1,9 +1,11 @@
-import type { Theme } from '../contexts/ThemeContext'
-import { TextStyle } from "react-native";
+import type { Theme } from '../contexts/ThemeContext';
 
 export const lightTheme: Theme = {
+    theme: 'light',
     colors: {
         primary: '#fff',
+        primary_dark: '#d8d8d8',
+        primary_light: '#fff',
         secondary: '#6c757d',
         border: '#e0e0e0',
         text: '#000'
@@ -43,10 +45,13 @@ export const lightTheme: Theme = {
 };
 
 export const darkTheme: Theme = {
+    theme: 'dark',
     colors: {
         primary: '#000',
+        primary_dark: '#000',
+        primary_light: '#262626',
         secondary: '#6c757d',
-        border: '#fff',
+        border: '#272727',
         text: '#fff'
     },
     typography: {

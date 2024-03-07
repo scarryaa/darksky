@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, StyleSheet, Pressable } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { ThemeContext } from '../contexts/ThemeContext';
 
 const NavigationButton = ({ name, active, activeName, size, color, navigation, screenName }) => {
     const [isHovered, setIsHovered] = useState(false);
+    const { theme } = useContext(ThemeContext);
 
     const handleHoverIn = () => {
         setIsHovered(true);
@@ -22,7 +24,11 @@ const NavigationButton = ({ name, active, activeName, size, color, navigation, s
             <Pressable
                 style={[
                     styles.navigationButton,
-                    { backgroundColor: isHovered ? 'lightblue' : 'transparent' },
+                    {
+                        backgroundColor: isHovered ?
+                            (theme.theme === 'light' ?
+                                theme.colors.primary_dark : theme.colors.primary_light) : 'transparent'
+                    },
                 ]}
                 onPress={handleButtonPress}
                 onHoverIn={handleHoverIn}
