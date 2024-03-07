@@ -8,6 +8,7 @@ export type CommonNavParams = {
 };
 
 export type AllNavigatorParams = CommonNavParams & {};
+export type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export type NavigationProp = NativeStackNavigationProp<AllNavigatorParams>;
 export type MatchResult = { params: RouteParams };

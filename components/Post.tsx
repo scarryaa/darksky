@@ -1,6 +1,6 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import { View, StyleSheet, Image } from 'react-native';
-import { AppBskyRichtextFacet, RichText } from '@atproto/api';
+import { AppBskyFeedDefs, AppBskyFeedPost, RichText } from '@atproto/api';
 import { agent } from '../services/api';
 import Text from './Text';
 import Link from '../components/Link';
@@ -8,27 +8,33 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { ThemeContext } from '../contexts/ThemeContext';
 import { ago } from '../util/time';
 
-const Post = ({ displayName, username, content, timestamp, avatar, isRepost, repostedBy, replyCount, repostCount, likeCount, id }) => {
+type Props = {
+    post: AppBskyFeedDefs.PostView;
+}
+
+const Post = ({ post }: Props) => {
     const { theme } = useContext(ThemeContext);
+    const record = useMemo<AppBskyFeedPost.Record | undefined>(
+        () =>
+            AppBskyFeedPost.isRecord(post.record) &&
+                AppBskyFeedPost.validateRecord(post.record).success
+                ? post.record
+                : undefined,
+        [post],
+    );
 
-    const rt = new RichText({
-        text: content,
-    });
+    console.log(record);
 
-    let markdown = '';
-    for (const segment of rt.segments()) {
-        const link = segment.link;
-        const mention = segment.mention;
-        const tag = segment.tag;
-
-        if (link && AppBskyRichtextFacet.validateMention(link).success) {
-            markdown += `[${segment.text}](${segment.link?.uri}) `;
-        } else if (mention && AppBskyRichtextFacet.validateMention(mention).success) {
-            markdown += `[${segment.text}](https://my-bsky-app.com/user/${segment.mention?.did}) `;
-        } else {
-            markdown += segment.text + ' ';
-        }
-    }
+    const rt = useMemo(
+        () =>
+            record
+                ? new RichText({
+                    text: record.text,
+                    facets: record.facets,
+                })
+                : undefined,
+        [record],
+    );
 
     useEffect(() => {
         const detectFacets = async () => {
@@ -40,32 +46,32 @@ const Post = ({ displayName, username, content, timestamp, avatar, isRepost, rep
         };
 
         detectFacets();
-    }, [content]);
+    }, [record.text]);
 
     return (
-        <Link link={`/profile/${username}/post/${id}`}
+        <Link link={`/profile/${post.author.did}/post/${post.cid}`}
             style={[styles.postContainer, {
                 borderColor: theme.colors.border,
                 paddingVertical: theme.spacing.small * 1.2,
                 paddingHorizontal: theme.spacing.small * 1.5,
             }]}>
-            {isRepost ? <Text style={[styles.repostTag, theme.typography['sm-bold']]}>Reposted by {repostedBy}</Text> : <></>}
+            {/* {isRepost ? <Text style={[styles.repostTag, theme.typography['sm-bold']]}>Reposted by {repostedBy}</Text> : <></>} */}
             <View style={styles.container}>
-                <Image source={{ uri: avatar }} style={styles.avatar} />
+                <Image source={{ uri: post.author.avatar }} style={styles.avatar} />
 
                 <View style={styles.postContent}>
                     <Text>
                         <Link link={''}>
-                            <Text style={styles.displayName}>{displayName}</Text>
+                            <Text style={styles.displayName}>{post.author.displayName}</Text>
                             &nbsp;
-                            <Text style={{ color: theme.colors.textGrey }}>@{username}</Text>
+                            <Text style={{ color: theme.colors.textGrey }}>@{post.author.handle}</Text>
                         </Link>
                         &nbsp;
                         <Text style={{ color: theme.colors.textGrey }}>·</Text>
                         &nbsp;
-                        <Text style={[theme.typography.sm, { color: theme.colors.textGrey }]}>{ago(timestamp)}</Text>
+                        <Text style={[theme.typography.sm, { color: theme.colors.textGrey }]}>{ago(post.indexedAt)}</Text>
                     </Text>
-                    <Text style={[styles.content, { marginBottom: theme.spacing.small, marginTop: theme.spacing.small / 8 }]}>{markdown}</Text>
+                    <Text style={[styles.content, { marginBottom: theme.spacing.small, marginTop: theme.spacing.small / 8 }]}>{rt.text}</Text>
                     <View style={styles.actionButtons}>
                         <View style={styles.actionButton}>
                             <Ionicons
@@ -78,7 +84,7 @@ const Post = ({ displayName, username, content, timestamp, avatar, isRepost, rep
                                 { color: theme.colors.textDarkGrey },
                                 { marginLeft: theme.spacing.small },
                                 theme.typography.lg
-                            ]}>{replyCount}</Text>
+                            ]}>{post.replyCount}</Text>
                         </View>
                         <View style={styles.actionButton}>
                             <Ionicons
@@ -91,7 +97,7 @@ const Post = ({ displayName, username, content, timestamp, avatar, isRepost, rep
                                 { color: theme.colors.textDarkGrey },
                                 { marginLeft: theme.spacing.small },
                                 theme.typography.lg
-                            ]}>{repostCount}</Text>
+                            ]}>{post.repostCount}</Text>
                         </View>
                         <View style={styles.actionButton}>
                             <Ionicons
@@ -104,7 +110,7 @@ const Post = ({ displayName, username, content, timestamp, avatar, isRepost, rep
                                 { color: theme.colors.textDarkGrey },
                                 { marginLeft: theme.spacing.small },
                                 theme.typography.lg
-                            ]}>{likeCount}</Text>
+                            ]}>{post.likeCount}</Text>
                         </View>
                         <Ionicons
                             backgroundColor="transparent"
