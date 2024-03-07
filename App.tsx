@@ -9,6 +9,7 @@ import CustomNavigationContainer from './components/CustomNavigationContainer';
 import SearchScreen from './screens/SearchScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import { ThemeProvider } from './contexts/ThemeContext';
+import PostThreadScreen from './screens/PostThreadScreen';
 
 const Stack = createStackNavigator();
 
@@ -54,9 +55,10 @@ const App = () => {
             <Stack.Navigator screenOptions={{ headerShown: false }}>
               {state.isLoggedIn ? (
                 <>
-                  <Stack.Screen name="Home" component={HomeScreen} />
-                  <Stack.Screen name="Search" component={SearchScreen} />
-                  <Stack.Screen name="Settings" component={SettingsScreen} />
+                  <Stack.Screen name="Home" getComponent={() => HomeScreen} />
+                  <Stack.Screen name="Search" getComponent={() => SearchScreen} />
+                  <Stack.Screen name="Settings" getComponent={() => SettingsScreen} />
+                  <Stack.Screen name="PostThread" getComponent={() => PostThreadScreen} />
                 </>
               ) : (
                 <Stack.Screen name="Login" component={LoginScreen} />

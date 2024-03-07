@@ -6,8 +6,9 @@ import Text from './Text';
 import Link from '../components/Link';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { ThemeContext } from '../contexts/ThemeContext';
+import { ago } from '../util/time';
 
-const Post = ({ displayName, username, content, timestamp, avatar, isRepost, repostedBy }) => {
+const Post = ({ displayName, username, content, timestamp, avatar, isRepost, repostedBy, replyCount, repostCount, likeCount, id }) => {
     const { theme } = useContext(ThemeContext);
 
     const rt = new RichText({
@@ -42,18 +43,19 @@ const Post = ({ displayName, username, content, timestamp, avatar, isRepost, rep
     }, [content]);
 
     return (
-        <View style={[styles.postContainer, {
-            borderColor: theme.colors.border,
-            paddingVertical: theme.spacing.small * 1.25,
-            paddingHorizontal: theme.spacing.small * 1.5,
-        }]}>
+        <Link link={`/profile/${username}/post/${id}`}
+            style={[styles.postContainer, {
+                borderColor: theme.colors.border,
+                paddingVertical: theme.spacing.small * 1.2,
+                paddingHorizontal: theme.spacing.small * 1.5,
+            }]}>
             {isRepost ? <Text style={[styles.repostTag, theme.typography['sm-bold']]}>Reposted by {repostedBy}</Text> : <></>}
             <View style={styles.container}>
                 <Image source={{ uri: avatar }} style={styles.avatar} />
 
                 <View style={styles.postContent}>
                     <Text>
-                        <Link displayText={'a'} link={''}>
+                        <Link link={''}>
                             <Text style={styles.displayName}>{displayName}</Text>
                             &nbsp;
                             <Text style={{ color: theme.colors.textGrey }}>@{username}</Text>
@@ -61,38 +63,59 @@ const Post = ({ displayName, username, content, timestamp, avatar, isRepost, rep
                         &nbsp;
                         <Text style={{ color: theme.colors.textGrey }}>·</Text>
                         &nbsp;
-                        <Text style={[styles.timestamp, { color: theme.colors.textGrey }]}>{timestamp}</Text>
+                        <Text style={[theme.typography.sm, { color: theme.colors.textGrey }]}>{ago(timestamp)}</Text>
                     </Text>
                     <Text style={[styles.content, { marginBottom: theme.spacing.small, marginTop: theme.spacing.small / 8 }]}>{markdown}</Text>
                     <View style={styles.actionButtons}>
-                        <Ionicons
-                            backgroundColor="transparent"
-                            name={'chatbubble-outline'}
-                            size={16}
-                            color={'grey'}
-                        />
-                        <Ionicons
-                            backgroundColor="transparent"
-                            name={'repeat-outline'}
-                            size={20}
-                            color={'grey'}
-                        />
-                        <Ionicons
-                            backgroundColor="transparent"
-                            name={'heart-outline'}
-                            size={16}
-                            color={'grey'}
-                        />
+                        <View style={styles.actionButton}>
+                            <Ionicons
+                                backgroundColor="transparent"
+                                name={'chatbubble-outline'}
+                                size={16}
+                                color={theme.colors.textDarkGrey}
+                            />
+                            <Text style={[
+                                { color: theme.colors.textDarkGrey },
+                                { marginLeft: theme.spacing.small },
+                                theme.typography.lg
+                            ]}>{replyCount}</Text>
+                        </View>
+                        <View style={styles.actionButton}>
+                            <Ionicons
+                                backgroundColor="transparent"
+                                name={'repeat-outline'}
+                                size={20}
+                                color={theme.colors.textDarkGrey}
+                            />
+                            <Text style={[
+                                { color: theme.colors.textDarkGrey },
+                                { marginLeft: theme.spacing.small },
+                                theme.typography.lg
+                            ]}>{repostCount}</Text>
+                        </View>
+                        <View style={styles.actionButton}>
+                            <Ionicons
+                                backgroundColor="transparent"
+                                name={'heart-outline'}
+                                size={16}
+                                color={theme.colors.textDarkGrey}
+                            />
+                            <Text style={[
+                                { color: theme.colors.textDarkGrey },
+                                { marginLeft: theme.spacing.small },
+                                theme.typography.lg
+                            ]}>{likeCount}</Text>
+                        </View>
                         <Ionicons
                             backgroundColor="transparent"
                             name={'ellipsis-horizontal'}
                             size={16}
-                            color={'grey'}
+                            color={theme.colors.textDarkGrey}
                         />
                     </View>
                 </View>
             </View>
-        </View >
+        </Link >
     );
 };
 
@@ -116,6 +139,7 @@ const styles = StyleSheet.create({
     },
     postContent: {
         flex: 1,
+        minWidth: 500,
     },
     usernameDisplayNameContainer: {
         display: 'flex',
@@ -132,15 +156,17 @@ const styles = StyleSheet.create({
     content: {
         fontSize: 16,
     },
-    timestamp: {
-        fontSize: 12,
-    },
     actionButtons: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingRight: 50,
-        alignItems: 'center'
+        alignItems: 'center',
+    },
+    actionButton: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
     }
 });
 

@@ -31,6 +31,10 @@ const HomeScreen = () => {
                     {timeline.map((post) => (
                         <li key={post.post.cid}>
                             <Post
+                                id={post.post.uri.split('/')[4]}
+                                likeCount={post.post.likeCount}
+                                replyCount={post.post.replyCount}
+                                repostCount={post.post.repostCount}
                                 repostedBy={post.reason?.by?.displayName}
                                 isRepost={post.reason?.$type == "app.bsky.feed.defs#reasonRepost"}
                                 displayName={post.post.author.displayName}

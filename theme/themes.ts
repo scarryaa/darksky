@@ -53,7 +53,8 @@ export const lightTheme: Theme = {
         secondary: '#6c757d',
         border: '#e0e0e0',
         text: '#000',
-        textGrey: '#606060'
+        textGrey: '#606060',
+        textDarkGrey: '#2d2d2d',
     },
     spacing: spacing,
     typography: typography,
@@ -68,7 +69,8 @@ export const darkTheme: Theme = {
         secondary: '#6c757d',
         border: '#272727',
         text: '#fff',
-        textGrey: '#afafaf'
+        textGrey: '#afafaf',
+        textDarkGrey: '#7a7a7a',
     },
     spacing: spacing,
     typography: typography,

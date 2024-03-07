@@ -12,6 +12,7 @@ export interface Theme {
         border: string;
         text: string;
         textGrey: string;
+        textDarkGrey: string;
     };
     typography: Typography;
     spacing: {
