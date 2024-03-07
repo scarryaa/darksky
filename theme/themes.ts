@@ -26,11 +26,22 @@ const typography: Typography = {
         letterSpacing: 0.25,
         fontWeight: '400',
     },
+    'sm-bold': {
+        fontSize: 14,
+        letterSpacing: 0.25,
+        fontWeight: 'bold',
+    },
     xs: {
         fontSize: 13,
         letterSpacing: 0.25,
         fontWeight: '400',
     },
+};
+
+const spacing = {
+    small: 8,
+    medium: 16,
+    large: 24,
 };
 
 export const lightTheme: Theme = {
@@ -41,14 +52,11 @@ export const lightTheme: Theme = {
         primary_light: '#fff',
         secondary: '#6c757d',
         border: '#e0e0e0',
-        text: '#000'
+        text: '#000',
+        textGrey: '#606060'
     },
+    spacing: spacing,
     typography: typography,
-    spacing: {
-        small: 8,
-        medium: 16,
-        large: 24,
-    },
 };
 
 export const darkTheme: Theme = {
@@ -59,12 +67,9 @@ export const darkTheme: Theme = {
         primary_light: '#262626',
         secondary: '#6c757d',
         border: '#272727',
-        text: '#fff'
+        text: '#fff',
+        textGrey: '#afafaf'
     },
+    spacing: spacing,
     typography: typography,
-    spacing: {
-        small: 8,
-        medium: 16,
-        large: 24,
-    },
 };

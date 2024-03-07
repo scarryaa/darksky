@@ -23,6 +23,8 @@ const SearchScreen = () => {
 
 const styles = StyleSheet.create({
     container: {
+        // @ts-ignore
+        overflow: 'auto',
         flex: 1,
     }
 });

@@ -42,8 +42,12 @@ const Post = ({ displayName, username, content, timestamp, avatar, isRepost, rep
     }, [content]);
 
     return (
-        <View style={[styles.postContainer, { borderColor: theme.colors.border }]}>
-            {isRepost ? <Text style={styles.repostTag}>Reposted by {repostedBy}</Text> : <></>}
+        <View style={[styles.postContainer, {
+            borderColor: theme.colors.border,
+            paddingVertical: theme.spacing.small * 1.25,
+            paddingHorizontal: theme.spacing.small * 1.5,
+        }]}>
+            {isRepost ? <Text style={[styles.repostTag, theme.typography['sm-bold']]}>Reposted by {repostedBy}</Text> : <></>}
             <View style={styles.container}>
                 <Image source={{ uri: avatar }} style={styles.avatar} />
 
@@ -52,14 +56,14 @@ const Post = ({ displayName, username, content, timestamp, avatar, isRepost, rep
                         <Link displayText={'a'} link={''}>
                             <Text style={styles.displayName}>{displayName}</Text>
                             &nbsp;
-                            <Text style={styles.username}>@{username}</Text>
+                            <Text style={{ color: theme.colors.textGrey }}>@{username}</Text>
                         </Link>
                         &nbsp;
-                        ·
+                        <Text style={{ color: theme.colors.textGrey }}>·</Text>
                         &nbsp;
-                        <Text style={styles.timestamp}>{timestamp}</Text>
+                        <Text style={[styles.timestamp, { color: theme.colors.textGrey }]}>{timestamp}</Text>
                     </Text>
-                    <Text style={styles.content}>{markdown}</Text>
+                    <Text style={[styles.content, { marginBottom: theme.spacing.small, marginTop: theme.spacing.small / 8 }]}>{markdown}</Text>
                     <View style={styles.actionButtons}>
                         <Ionicons
                             backgroundColor="transparent"
@@ -76,7 +80,7 @@ const Post = ({ displayName, username, content, timestamp, avatar, isRepost, rep
                         <Ionicons
                             backgroundColor="transparent"
                             name={'heart-outline'}
-                            size={20}
+                            size={16}
                             color={'grey'}
                         />
                         <Ionicons
@@ -88,18 +92,16 @@ const Post = ({ displayName, username, content, timestamp, avatar, isRepost, rep
                     </View>
                 </View>
             </View>
-        </View>
+        </View >
     );
 };
 
 const styles = StyleSheet.create({
     postContainer: {
         borderTopWidth: 1,
-        paddingVertical: 12,
-        paddingHorizontal: 12,
     },
     repostTag: {
-        paddingLeft: 57,
+        paddingLeft: 62,
         fontWeight: 'bold',
         color: '#828282'
     },
@@ -107,8 +109,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     avatar: {
-        width: 45,
-        height: 45,
+        width: 50,
+        height: 50,
         borderRadius: 50,
         marginRight: 12,
     },
@@ -121,30 +123,24 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'nowrap',
         marginBottom: 4,
-        lineHeight: 19,
         alignItems: 'baseline',
     },
     displayName: {
         fontWeight: 'bold',
         fontSize: 16,
     },
-    username: {
-        lineHeight: 15,
-    },
     content: {
         fontSize: 16,
-        marginBottom: 8,
     },
     timestamp: {
         fontSize: 12,
-        color: '#888',
     },
     actionButtons: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingRight: 50,
-        alignContent: 'flex-end'
+        alignItems: 'center'
     }
 });
 

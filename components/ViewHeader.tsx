@@ -12,7 +12,11 @@ const ViewHeader: React.FC<ViewHeaderProps> = ({ children, showBackButton = fals
 
     return (
         <View style={styles.viewHeaderContainer}>
-            <View style={[styles.viewHeader, { borderColor: theme.colors.border }]}>
+            <View style={[styles.viewHeader, {
+                borderColor: theme.colors.border,
+                paddingVertical: theme.spacing.medium,
+                paddingHorizontal: theme.spacing.medium
+            }]}>
                 {children}
             </View>
         </View >
@@ -24,8 +28,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     viewHeader: {
-        paddingVertical: 16,
-        paddingHorizontal: 16,
         borderBottomWidth: 1,
         borderRightWidth: 1,
         maxWidth: 600,

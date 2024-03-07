@@ -11,6 +11,7 @@ export interface Theme {
         secondary: string;
         border: string;
         text: string;
+        textGrey: string;
     };
     typography: Typography;
     spacing: {
@@ -33,6 +34,7 @@ export type TypographyVariant =
     'lg' |
     'md' |
     'sm' |
+    'sm-bold' |
     'xs';
 
 export const ThemeContext = createContext<ThemeContextType>({

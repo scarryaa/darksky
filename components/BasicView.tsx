@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, useWindowDimensions } from "react-native";
 import { ThemeContext } from "../contexts/ThemeContext";
 
 type BasicViewProps = {
@@ -9,9 +9,10 @@ type BasicViewProps = {
 
 const BasicView: React.FC<BasicViewProps> = ({ children, style }) => {
     const { theme } = useContext(ThemeContext);
+    const height = useWindowDimensions().height;
 
     return (
-        <View style={[{ borderColor: theme.colors.border }, styles.basicViewContainer, style]}>
+        <View style={[{ borderColor: theme.colors.border }, { minHeight: height + 1 }, styles.basicViewContainer, style]}>
             {children}
         </View>
     )
@@ -26,7 +27,6 @@ const styles = StyleSheet.create({
         marginRight: 'auto',
         maxWidth: 600,
         minWidth: 600,
-        minHeight: '100%',
         transform: 'translateX(-5%)',
     },
 });
