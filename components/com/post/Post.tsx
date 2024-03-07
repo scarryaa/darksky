@@ -1,18 +1,14 @@
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { View, StyleSheet, Image } from 'react-native';
-import { AppBskyFeedDefs, AppBskyFeedPost, RichText } from '@atproto/api';
+import { AppBskyFeedDefs, AppBskyFeedPost, AtUri, RichText } from '@atproto/api';
 import { agent } from '../../../services/api';
 import Text from '../../Text';
 import Link from '../../Link';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { ThemeContext } from '../../../contexts/ThemeContext';
 import { ago } from '../../../util/time';
-import BookmarkButton from './controls/BookmarkButton';
-import LikeButton from './controls/LikeButton';
-import ReplyButton from './controls/ReplyButton';
-import RepostButton from './controls/RepostButton';
-import MoreButton from './controls/ShareButton';
 import PostControls from './controls/PostControls';
+import { PostContext } from '../../../contexts/PostContext';
 
 type Props = {
     post: AppBskyFeedDefs.PostView;
@@ -21,6 +17,9 @@ type Props = {
 
 const Post = ({ post, reason }: Props) => {
     const { theme } = useContext(ThemeContext);
+    const [replyAuthorDisplayName, setReplyAuthorDisplayName] = useState('');
+    const [replyAuthorHandle, setReplyAuthorHandle] = useState('');
+    const { cachePost } = useContext(PostContext);
 
     const record = useMemo<AppBskyFeedPost.Record | undefined>(
         () =>
@@ -30,6 +29,8 @@ const Post = ({ post, reason }: Props) => {
                 : undefined,
         [post],
     );
+
+    let replyAuthorDid = '';
 
     const rt = useMemo(
         () =>
@@ -54,8 +55,31 @@ const Post = ({ post, reason }: Props) => {
         detectFacets();
     }, [record.text]);
 
+    useEffect(() => {
+        const getProfile = async () => {
+            if (record.reply) {
+                const urip = new AtUri(record.reply?.parent?.uri || record.reply.root.uri);
+                replyAuthorDid = urip.hostname;
+
+                try {
+                    const res = await agent.getProfile({ actor: replyAuthorDid });
+                    setReplyAuthorDisplayName(res.data.displayName);
+                    setReplyAuthorHandle(res.data.handle);
+                } catch (error) {
+                    console.error('Error fetching profile:', error);
+                }
+            }
+        };
+
+        getProfile();
+    }, [record.reply]);
+
+    const cachePostCallback = (postId, postData) => {
+        cachePost(postId, postData);
+    };
+
     return (
-        <Link hoverUnderline={false} link={`/profile/${post.author.did}/post/${post.uri.split('/')[4]}`}
+        <Link beforePressLogic={() => cachePostCallback(post.uri, post)} hoverUnderline={false} link={`/profile/${post.author.did}/post/${post.uri.split('/')[4]}`}
             style={[styles.postContainer, {
                 borderColor: theme.colors.border,
                 paddingVertical: theme.spacing.small * 1.2,
@@ -67,8 +91,8 @@ const Post = ({ post, reason }: Props) => {
 
                 <View style={styles.postContent}>
                     <Text>
-                        <Link hoverUnderline={true} link={''}>
-                            <Text style={styles.displayName}>{post.author.displayName}</Text>
+                        <Link hoverUnderline={true} link={`/profile/${post.author.did}`}>
+                            <Text style={styles.displayName}>{post.author.displayName == '' ? post.author.handle : post.author.displayName}</Text>
                             &nbsp;
                             <Text style={{ color: theme.colors.textGrey }}>@{post.author.handle}</Text>
                         </Link>
@@ -77,6 +101,11 @@ const Post = ({ post, reason }: Props) => {
                         &nbsp;
                         <Text style={[theme.typography.sm, { color: theme.colors.textGrey }]}>{ago(post.indexedAt)}</Text>
                     </Text>
+                    {(replyAuthorDisplayName !== '') &&
+                        <View style={{ display: 'flex', flexDirection: 'row', gap: theme.spacing.small / 2, alignItems: 'center' }}>
+                            <Ionicons size={14} name='arrow-undo' color={theme.colors.textGrey} />
+                            <Text style={{ color: theme.colors.textGrey, marginBottom: theme.spacing.small / 4 }}>Reply to <Link link={`/profile/${replyAuthorHandle}`} hoverUnderline={true}>{replyAuthorDisplayName}</Link></Text>
+                        </View>}
                     <Text style={[styles.content, { marginBottom: theme.spacing.medium / 1.5, marginTop: theme.spacing.small / 8 }]}>{rt.text}</Text>
                     <PostControls big={false} post={post} />
                 </View>

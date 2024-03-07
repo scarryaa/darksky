@@ -19,7 +19,7 @@ const RepostButton = ({ repostCount, big, onRepost }: RepostButtonProps) => {
             <Ionicons
                 backgroundColor="transparent"
                 name={'repeat-outline'}
-                size={big ? 24 : 20}
+                size={20}
                 color={theme.colors.textDarkGrey}
             />
             {repostCount > 0 && <Text style={[

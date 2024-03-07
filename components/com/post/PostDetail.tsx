@@ -4,7 +4,7 @@ import { ThemeContext } from "../../../contexts/ThemeContext";
 import { AppBskyFeedDefs, AppBskyFeedPost, RichText } from "@atproto/api";
 import Text from "../../Text";
 import Link from "../../Link";
-import { ago, agoLong } from "../../../util/time";
+import { agoLong } from "../../../util/time";
 import ReplyButton from "./controls/ReplyButton";
 import RepostButton from "./controls/RepostButton";
 import LikeButton from "./controls/LikeButton";
@@ -45,12 +45,13 @@ const PostDetail = ({ post }: Props) => {
             paddingHorizontal: theme.spacing.small * 2
         }]}>
             <View style={styles.postInner}>
+                {/* @ts-ignore */}
                 <Image source={{ uri: post.author.avatar }} style={[styles.avatar, { marginRight: theme.spacing.small }]} />
                 <View style={styles.authorInfo}>
-                    <Link hoverUnderline={true} link={''}>
-                        <Text style={styles.displayName}>{post.author.displayName}</Text>
+                    <Link style={[{ color: theme.colors.text }]} hoverUnderline={true} link={`/profile/${post.author.did}`}>
+                        <Text style={styles.displayName}>{post.author.displayName == '' ? post.author.handle : post.author.displayName}</Text>
                     </Link>
-                    <Link hoverUnderline={true} link={''}>
+                    <Link style={[styles.authorHandle, { color: theme.colors.textGrey }]} hoverUnderline={true} link={`/profile/${post.author.did}`}>
                         <Text style={{ color: theme.colors.textGrey }}>@{post.author.handle}</Text>
                     </Link>
                 </View>
@@ -60,17 +61,18 @@ const PostDetail = ({ post }: Props) => {
             <Text style={[{ color: theme.colors.textGrey }, theme.typography.md, { marginBottom: theme.spacing.medium }]}>
                 {agoLong(post.indexedAt)}
             </Text>
-            <View style={[styles.likeContainer, {
+            {post.likeCount > 0 && <View style={[styles.likeContainer, {
                 borderTopColor: theme.colors.border,
                 borderBottomColor: theme.colors.border,
                 paddingVertical: theme.spacing.small,
                 paddingHorizontal: theme.spacing.small,
+                marginBottom: theme.spacing.medium,
             }]}>
                 <View style={[styles.likeText, { gap: theme.spacing.small / 1.25 }, theme.typography.md]}>
-                    <Text style={theme.typography["md-bold"]}>{post.likeCount}</Text> <Text style={{ color: theme.colors.textGrey }}>likes</Text>
+                    <Text style={theme.typography["md-bold"]}>{post.likeCount}</Text> <Text style={{ color: theme.colors.textGrey }}>like{post.likeCount > 1 ? 's' : ''}</Text>
                 </View>
-            </View>
-            <View style={[styles.postControls, { marginTop: theme.spacing.medium, marginHorizontal: theme.spacing.small }]}>
+            </View>}
+            <View style={[styles.postControls, { marginHorizontal: theme.spacing.small }]}>
                 <ReplyButton big={true} onReply={() => { }} replyCount={post.replyCount} />
                 <RepostButton big={true} onRepost={() => { }} repostCount={post.repostCount} />
                 <LikeButton big={true} onLike={() => { }} likeCount={post.likeCount} />
@@ -94,6 +96,10 @@ const styles = StyleSheet.create({
     displayName: {
         fontWeight: 'bold',
         fontSize: 16,
+    },
+    authorHandle: {
+        // @ts-ignore web only
+        maxWidth: 'max-content'
     },
     content: {
         fontSize: 20,

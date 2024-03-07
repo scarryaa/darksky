@@ -11,6 +11,7 @@ import { AppBskyFeedDefs, AppBskyFeedGetPostThread } from "@atproto/api";
 import { makeRecordUri } from "../strings/helpers";
 import PostDetail from "../components/com/post/PostDetail";
 import { PostView, ThreadViewPost } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
+import { PostContext } from "../contexts/PostContext";
 
 type Props = NativeStackScreenProps<CommonNavParams, 'PostThread'>
 type ThreadViewNode = AppBskyFeedGetPostThread.OutputSchema['thread'];
@@ -20,6 +21,8 @@ const PostThreadScreen = ({ route }: Props) => {
     const [posts, setPosts] = useState<ThreadViewPost>();
     const { name, rkey } = route.params;
     const uri = makeRecordUri(name, 'app.bsky.feed.post', rkey);
+    const { getPostFromCache, cachePost } = useContext(PostContext);
+    const postData = getPostFromCache(uri);
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -33,10 +36,13 @@ const PostThreadScreen = ({ route }: Props) => {
             }
         };
 
-        fetchPosts();
+        if (!postData) {
+            fetchPosts();
+            cachePost(uri, posts);
+        }
     }, []);
 
-    if (!posts) return <View>loading</View>;
+    if (!postData) return <View style={[styles.container, { backgroundColor: theme.colors.primary }]}></View>;
 
     return (
         <View style={[styles.container, { backgroundColor: theme.colors.primary }]}>
@@ -47,7 +53,7 @@ const PostThreadScreen = ({ route }: Props) => {
             </ViewHeader>
             <BasicView>
                 <PostDetail
-                    post={posts.post}
+                    post={postData}
                 />
             </BasicView>
         </View>
