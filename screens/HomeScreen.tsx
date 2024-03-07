@@ -30,6 +30,7 @@ const HomeScreen = () => {
                     {timeline.map((post) => (
                         <li key={post.post.cid}>
                             <Post
+                                style={{ borderTopWidth: 1 }}
                                 post={post.post}
                                 reason={post.reason}
                             />

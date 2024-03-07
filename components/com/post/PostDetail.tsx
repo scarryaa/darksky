@@ -1,5 +1,5 @@
 import { useContext, useMemo } from "react";
-import { View, StyleSheet, Image } from "react-native";
+import { View, StyleSheet, Image, StyleProp, ViewStyle } from "react-native";
 import { ThemeContext } from "../../../contexts/ThemeContext";
 import { AppBskyFeedDefs, AppBskyFeedPost, RichText } from "@atproto/api";
 import Text from "../../Text";
@@ -13,9 +13,10 @@ import BookmarkButton from "./controls/BookmarkButton";
 
 type Props = {
     post: AppBskyFeedDefs.PostView;
+    style?: StyleProp<ViewStyle>
 }
 
-const PostDetail = ({ post }: Props) => {
+const PostDetail = ({ post, style }: Props) => {
     const { theme } = useContext(ThemeContext);
 
     const record = useMemo<AppBskyFeedPost.Record | undefined>(
@@ -39,7 +40,7 @@ const PostDetail = ({ post }: Props) => {
     );
 
     return (
-        <View style={[styles.postContainer, {
+        <View style={[style, styles.postContainer, {
             borderColor: theme.colors.border,
             paddingVertical: theme.spacing.small * 1.5,
             paddingHorizontal: theme.spacing.small * 2

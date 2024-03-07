@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, Image, StyleProp, ViewStyle } from 'react-native';
 import { AppBskyFeedDefs, AppBskyFeedPost, AtUri, RichText } from '@atproto/api';
 import { agent } from '../../../services/api';
 import Text from '../../Text';
@@ -13,9 +13,10 @@ import { PostContext } from '../../../contexts/PostContext';
 type Props = {
     post: AppBskyFeedDefs.PostView;
     reason?: AppBskyFeedDefs.ReasonRepost | undefined;
+    style?: StyleProp<ViewStyle>
 }
 
-const Post = ({ post, reason }: Props) => {
+const Post = ({ post, reason, style }: Props) => {
     const { theme } = useContext(ThemeContext);
     const [replyAuthorDisplayName, setReplyAuthorDisplayName] = useState('');
     const [replyAuthorHandle, setReplyAuthorHandle] = useState('');
@@ -80,7 +81,7 @@ const Post = ({ post, reason }: Props) => {
 
     return (
         <Link beforePressLogic={() => cachePostCallback(post.uri, post)} hoverUnderline={false} link={`/profile/${post.author.did}/post/${post.uri.split('/')[4]}`}
-            style={[styles.postContainer, {
+            style={[style, {
                 borderColor: theme.colors.border,
                 paddingVertical: theme.spacing.small * 1.2,
                 paddingHorizontal: theme.spacing.small * 1.5,
@@ -115,9 +116,6 @@ const Post = ({ post, reason }: Props) => {
 };
 
 const styles = StyleSheet.create({
-    postContainer: {
-        borderTopWidth: 1,
-    },
     repostTag: {
         paddingLeft: 62,
         fontWeight: 'bold',

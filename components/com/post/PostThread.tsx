@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { View } from "react-native";
 import Post from "./Post";
 import PostDetail from "./PostDetail";
 import { agent } from "../../../services/api";
 import { AppBskyFeedDefs, AppBskyFeedPost } from "@atproto/api";
+import { isNative } from "../../../util/platform";
 
 type PostThreadProps = {
     post: AppBskyFeedDefs.PostView;
@@ -19,6 +20,8 @@ const PostThread = ({ post }: PostThreadProps) => {
     const [currentPost, setCurrentPost] = useState<AppBskyFeedDefs.PostView | null>(null);
     const [posts, setPosts] = useState<AppBskyFeedDefs.PostView[]>([]);
     const [childPosts, setChildPosts] = useState<AppBskyFeedDefs.PostView[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const currentPostRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const getParentPosts = async () => {
@@ -26,7 +29,6 @@ const PostThread = ({ post }: PostThreadProps) => {
             if (AppBskyFeedPost.isRecord(post.record) && AppBskyFeedPost.validateRecord(post.record).success) {
                 try {
                     const thread = await agent.getPostThread({ uri: post.uri });
-                    console.log("Thread data:", thread);
                     setThread(thread.data.thread);
                 } catch (error) {
                     console.error("Error fetching parent posts:", error);
@@ -37,6 +39,12 @@ const PostThread = ({ post }: PostThreadProps) => {
         getParentPosts();
         setCurrentPost(post);
     }, [post]);
+
+    useEffect(() => {
+        if (!loading && currentPostRef.current) {
+            currentPostRef.current.scrollIntoView({ behavior: "instant" });
+        }
+    }, [loading, currentPost]);
 
     useEffect(() => {
         if (thread) {
@@ -71,6 +79,7 @@ const PostThread = ({ post }: PostThreadProps) => {
 
                 collectReplies(thread.replies);
                 setChildPosts(replyPosts);
+                setLoading(false);
             }
         }
     }, [thread]);
@@ -83,10 +92,14 @@ const PostThread = ({ post }: PostThreadProps) => {
             {filteredPosts.map((post, index) => (
                 <Post key={index} post={post} />
             ))}
-            {currentPost && <PostDetail post={currentPost} />}
+            <div ref={currentPostRef}>
+                {currentPost && <PostDetail style={{ borderTopWidth: filteredPosts.length > 0 ? 1 : 0 }} post={currentPost} />}
+            </div>
             {childPosts.map((post, index) => (
-                <Post key={index} post={post} />
+                <Post style={{ borderBottomWidth: (index === childPosts.length - 1 || post.replyCount == 0) ? 1 : 0 }} key={index} post={post} />
             ))}
+            {/* @ts-ignore web only */}
+            <View style={{ height: isNative ? 600 : '100vh', }}></View>
         </View>
     );
 };
