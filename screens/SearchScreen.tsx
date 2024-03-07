@@ -1,9 +1,30 @@
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
+import Text from "../components/Text";
+import ViewHeader from "../components/ViewHeader";
+import BasicView from "../components/BasicView";
+import { useContext } from "react";
+import { ThemeContext } from "../contexts/ThemeContext";
 
 const SearchScreen = () => {
+    const { theme } = useContext(ThemeContext);
+
     return (
-        <View>Search</View>
+        <View style={[styles.container, { backgroundColor: theme.colors.primary }]}>
+            <ViewHeader showBackButton={false}>
+                <Text style={theme.typography.header}>
+                    Search
+                </Text>
+            </ViewHeader>
+            <BasicView>
+            </BasicView>
+        </View>
     );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    }
+});
 
 export default SearchScreen;

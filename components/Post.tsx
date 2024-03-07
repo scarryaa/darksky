@@ -94,14 +94,9 @@ const Post = ({ displayName, username, content, timestamp, avatar, isRepost, rep
 
 const styles = StyleSheet.create({
     postContainer: {
-        borderBottomWidth: 1,
-        borderRightWidth: 1,
-        borderLeftWidth: 1,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        maxWidth: 600,
-        transform: 'translateX(-5%)',
-        padding: 10,
+        borderTopWidth: 1,
+        paddingVertical: 12,
+        paddingHorizontal: 12,
     },
     repostTag: {
         paddingLeft: 57,

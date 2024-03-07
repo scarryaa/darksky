@@ -1,4 +1,37 @@
-import type { Theme } from '../contexts/ThemeContext';
+import type { Theme, Typography } from '../contexts/ThemeContext';
+
+const typography: Typography = {
+    header: {
+        fontSize: 20,
+        letterSpacing: 0.25,
+        fontWeight: 'bold'
+    },
+    xl: {
+        fontSize: 17,
+        letterSpacing: 0.25,
+        fontWeight: '400',
+    },
+    lg: {
+        fontSize: 16,
+        letterSpacing: 0.25,
+        fontWeight: '400',
+    },
+    md: {
+        fontSize: 15,
+        letterSpacing: 0.25,
+        fontWeight: '400',
+    },
+    sm: {
+        fontSize: 14,
+        letterSpacing: 0.25,
+        fontWeight: '400',
+    },
+    xs: {
+        fontSize: 13,
+        letterSpacing: 0.25,
+        fontWeight: '400',
+    },
+};
 
 export const lightTheme: Theme = {
     theme: 'light',
@@ -10,33 +43,7 @@ export const lightTheme: Theme = {
         border: '#e0e0e0',
         text: '#000'
     },
-    typography: {
-        xl: {
-            fontSize: 17,
-            letterSpacing: 0.25,
-            fontWeight: '400',
-        },
-        lg: {
-            fontSize: 16,
-            letterSpacing: 0.25,
-            fontWeight: '400',
-        },
-        md: {
-            fontSize: 15,
-            letterSpacing: 0.25,
-            fontWeight: '400',
-        },
-        sm: {
-            fontSize: 14,
-            letterSpacing: 0.25,
-            fontWeight: '400',
-        },
-        xs: {
-            fontSize: 13,
-            letterSpacing: 0.25,
-            fontWeight: '400',
-        },
-    },
+    typography: typography,
     spacing: {
         small: 8,
         medium: 16,
@@ -54,33 +61,7 @@ export const darkTheme: Theme = {
         border: '#272727',
         text: '#fff'
     },
-    typography: {
-        xl: {
-            fontSize: 17,
-            letterSpacing: 0.25,
-            fontWeight: '400',
-        },
-        lg: {
-            fontSize: 16,
-            letterSpacing: 0.25,
-            fontWeight: '400',
-        },
-        md: {
-            fontSize: 15,
-            letterSpacing: 0.25,
-            fontWeight: '400',
-        },
-        sm: {
-            fontSize: 14,
-            letterSpacing: 0.25,
-            fontWeight: '400',
-        },
-        xs: {
-            fontSize: 13,
-            letterSpacing: 0.25,
-            fontWeight: '400',
-        },
-    },
+    typography: typography,
     spacing: {
         small: 8,
         medium: 16,

@@ -28,6 +28,7 @@ interface ThemeContextType {
 export type Typography = Record<TypographyVariant, TextStyle>
 
 export type TypographyVariant =
+    'header' |
     'xl' |
     'lg' |
     'md' |

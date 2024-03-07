@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import Post from '../components/Post';
 import { agent } from '../services/api';
 import { ThemeContext } from '../contexts/ThemeContext';
+import BasicView from '../components/BasicView';
 
 const HomeScreen = () => {
     const [timeline, setTimeline] = useState([]);
@@ -24,23 +25,25 @@ const HomeScreen = () => {
 
     return (
         <View style={[styles.container, { backgroundColor: theme.colors.primary }]}>
-            {/* @ts-ignore */}
-            <ul style={styles.postList}>
-                {timeline.map((post) => (
-                    <li key={post.post.cid}>
-                        <Post
-                            repostedBy={post.reason?.by?.displayName}
-                            isRepost={post.reason?.$type == "app.bsky.feed.defs#reasonRepost"}
-                            displayName={post.post.author.displayName}
-                            username={post.post.author.handle}
-                            content={post.post.record.text}
-                            timestamp={post.post.indexedAt}
-                            avatar={post.post.author.avatar}
-                        />
-                    </li>
-                ))}
+            <BasicView>
+                {/* @ts-ignore */}
+                <ul style={styles.postList}>
+                    {timeline.map((post) => (
+                        <li key={post.post.cid}>
+                            <Post
+                                repostedBy={post.reason?.by?.displayName}
+                                isRepost={post.reason?.$type == "app.bsky.feed.defs#reasonRepost"}
+                                displayName={post.post.author.displayName}
+                                username={post.post.author.handle}
+                                content={post.post.record.text}
+                                timestamp={post.post.indexedAt}
+                                avatar={post.post.author.avatar}
+                            />
+                        </li>
+                    ))}
 
-            </ul>
+                </ul>
+            </BasicView>
         </View >
     );
 };
@@ -48,11 +51,13 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        // @ts-ignore
+        overflow: 'auto',
     },
     postList: {
         width: '100%',
         // @ts-ignore
-        overflow: 'auto',
+        listStyle: 'none',
         margin: 0,
         padding: 0,
     },
