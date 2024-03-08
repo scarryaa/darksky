@@ -10,7 +10,7 @@ import SearchScreen from './screens/SearchScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import { ThemeProvider } from './contexts/ThemeContext';
 import PostThreadScreen from './screens/PostThreadScreen';
-import { PostProvider } from './contexts/PostContext';
+import { PostProvider, PostsProvider } from './contexts/PostContext';
 
 const Stack = createStackNavigator();
 
@@ -51,24 +51,26 @@ const App = () => {
   return (
     <NavigationContainer>
       <PostProvider>
-        <ThemeProvider>
-          <CustomNavigationContainer sidebarVisible={state.isLoggedIn}>
-            <AuthContext.Provider value={authContext}>
-              <Stack.Navigator screenOptions={{ headerShown: false }}>
-                {state.isLoggedIn ? (
-                  <>
-                    <Stack.Screen name="Home" getComponent={() => HomeScreen} />
-                    <Stack.Screen name="Search" getComponent={() => SearchScreen} />
-                    <Stack.Screen name="Settings" getComponent={() => SettingsScreen} />
-                    <Stack.Screen name="PostThread" getComponent={() => PostThreadScreen} />
-                  </>
-                ) : (
-                  <Stack.Screen name="Login" component={LoginScreen} />
-                )}
-              </Stack.Navigator>
-            </AuthContext.Provider>
-          </CustomNavigationContainer>
-        </ThemeProvider>
+        <PostsProvider>
+          <ThemeProvider>
+            <CustomNavigationContainer sidebarVisible={state.isLoggedIn}>
+              <AuthContext.Provider value={authContext}>
+                <Stack.Navigator screenOptions={{ headerShown: false }}>
+                  {state.isLoggedIn ? (
+                    <>
+                      <Stack.Screen name="Home" getComponent={() => HomeScreen} />
+                      <Stack.Screen name="Search" getComponent={() => SearchScreen} />
+                      <Stack.Screen name="Settings" getComponent={() => SettingsScreen} />
+                      <Stack.Screen name="PostThread" getComponent={() => PostThreadScreen} />
+                    </>
+                  ) : (
+                    <Stack.Screen name="Login" component={LoginScreen} />
+                  )}
+                </Stack.Navigator>
+              </AuthContext.Provider>
+            </CustomNavigationContainer>
+          </ThemeProvider>
+        </PostsProvider>
       </PostProvider>
     </NavigationContainer>
   );

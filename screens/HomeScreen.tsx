@@ -1,25 +1,16 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import Post from '../components/com/post/Post';
-import { agent } from '../services/api';
 import { ThemeContext } from '../contexts/ThemeContext';
 import BasicView from '../components/BasicView';
+import { PostsContext } from '../contexts/PostContext';
 
 const HomeScreen = () => {
-    const [timeline, setTimeline] = useState([]);
     const { theme } = useContext(ThemeContext);
+    const { timeline, refreshPosts } = useContext(PostsContext);
 
     useEffect(() => {
-        const fetchFeeds = async () => {
-            try {
-                const response = await agent.app.bsky.feed.getTimeline({ limit: 50 });
-                setTimeline(response.data.feed);
-            } catch (error) {
-                console.error('Error fetching feeds: ', error);
-            }
-        };
-
-        fetchFeeds();
+        refreshPosts();
     }, []);
 
     return (

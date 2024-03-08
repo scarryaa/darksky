@@ -4,10 +4,12 @@ import { useNavigation } from '@react-navigation/native';
 
 import NavigationButton from './NavigationButton';
 import { ThemeContext } from '../contexts/ThemeContext';
+import { PostsContext } from '../contexts/PostContext';
 
 const CustomNavigationContainer = ({ children, sidebarVisible }) => {
     const navigation = useNavigation();
     const { theme } = useContext(ThemeContext);
+    const { refreshPosts } = useContext(PostsContext);
 
     return (
         <View style={styles.container}>
@@ -22,6 +24,7 @@ const CustomNavigationContainer = ({ children, sidebarVisible }) => {
                         active={true}
                         activeName={"home"}
                         screenName={"Home"}
+                        doOnPress={refreshPosts}
                         name="home-outline"
                         size={28}
                         color={theme.colors.text}
