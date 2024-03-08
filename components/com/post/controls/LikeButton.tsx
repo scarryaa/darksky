@@ -11,19 +11,20 @@ type LikeButtonProps = {
     onLike: () => void;
 }
 
-const LikeButton = ({ likeCount, big, onLike }: LikeButtonProps) => {
+const LikeButton = ({ likeCount, liked, big, onLike }: LikeButtonProps) => {
     const { theme } = useContext(ThemeContext);
 
     return (
-        <View style={[styles.likeButton, { gap: theme.spacing.small / 2 }]}>
+        <View style={[styles.likeButton, { gap: theme.spacing.xs }]}>
             <Ionicons
+                onPress={onLike}
                 backgroundColor="transparent"
-                name={'heart-outline'}
+                name={liked ? 'heart' : 'heart-outline'}
                 size={big ? 20 : 16}
-                color={theme.colors.textDarkGrey}
+                color={liked ? theme.colors.red : theme.colors.textDarkGrey}
             />
             {likeCount > 0 && <Text style={[
-                { color: theme.colors.textDarkGrey },
+                { color: liked ? theme.colors.red : theme.colors.textDarkGrey },
                 theme.typography.lg
             ]}>{likeCount}</Text>}
         </View>

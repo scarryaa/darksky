@@ -83,8 +83,8 @@ const Post = ({ post, reason, style }: Props) => {
         <Link beforePressLogic={() => cachePostCallback(post.uri, post)} hoverUnderline={false} link={`/profile/${post.author.did}/post/${post.uri.split('/')[4]}`}
             style={[style, {
                 borderColor: theme.colors.border,
-                paddingVertical: theme.spacing.small * 1.2,
-                paddingHorizontal: theme.spacing.small * 1.5,
+                paddingVertical: theme.spacing.sm * 1.2,
+                paddingHorizontal: theme.spacing.sm * 1.5,
             }]}>
             {AppBskyFeedDefs.isReasonRepost(reason) ? <Text style={[styles.repostTag, theme.typography['sm-bold']]}>Reposted by {reason.by.displayName || reason.by.handle}</Text> : <></>}
             <View style={styles.container}>
@@ -103,11 +103,11 @@ const Post = ({ post, reason, style }: Props) => {
                         <Text style={[theme.typography.sm, { color: theme.colors.textGrey }]}>{ago(post.indexedAt)}</Text>
                     </Text>
                     {(replyAuthorDisplayName !== '') &&
-                        <View style={{ display: 'flex', flexDirection: 'row', gap: theme.spacing.small / 2, alignItems: 'center' }}>
+                        <View style={{ display: 'flex', flexDirection: 'row', gap: theme.spacing.xs, alignItems: 'center' }}>
                             <Ionicons size={14} name='arrow-undo' color={theme.colors.textGrey} />
-                            <Text style={{ color: theme.colors.textGrey, marginBottom: theme.spacing.small / 4 }}>Reply to <Link link={`/profile/${replyAuthorHandle}`} hoverUnderline={true}>{replyAuthorDisplayName}</Link></Text>
+                            <Text style={{ color: theme.colors.textGrey, marginBottom: theme.spacing.sm / 4 }}>Reply to <Link link={`/profile/${replyAuthorHandle}`} hoverUnderline={true}>{replyAuthorDisplayName}</Link></Text>
                         </View>}
-                    <Text style={[styles.content, { marginBottom: theme.spacing.medium / 1.5, marginTop: theme.spacing.small / 8 }]}>{rt.text}</Text>
+                    <Text style={[styles.content, { marginBottom: theme.spacing.md / 1.5, marginTop: theme.spacing.sm / 8 }]}>{rt.text}</Text>
                     <PostControls big={false} post={post} />
                 </View>
             </View>

@@ -14,8 +14,8 @@ const ViewHeader: React.FC<ViewHeaderProps> = ({ children, showBackButton = fals
         <View style={styles.viewHeaderContainer}>
             <View style={[styles.viewHeader, {
                 borderColor: theme.colors.border,
-                paddingVertical: theme.spacing.medium,
-                paddingHorizontal: theme.spacing.medium
+                paddingVertical: theme.spacing.md,
+                paddingHorizontal: theme.spacing.md
             }]}>
                 {children}
             </View>

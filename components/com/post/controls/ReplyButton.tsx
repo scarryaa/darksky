@@ -14,7 +14,7 @@ const ReplyButton = ({ replyCount, big, onReply }: ReplyButtonProps) => {
     const { theme } = useContext(ThemeContext);
 
     return (
-        <View style={[styles.replyButton, { gap: theme.spacing.small / 2 }]}>
+        <View style={[styles.replyButton, { gap: theme.spacing.xs }]}>
             <Ionicons
                 backgroundColor="transparent"
                 name={'chatbubble-outline'}

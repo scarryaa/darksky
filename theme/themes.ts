@@ -6,6 +6,11 @@ const typography: Typography = {
         letterSpacing: 0.25,
         fontWeight: 'bold'
     },
+    xxl: {
+        fontSize: 18,
+        letterSpacing: 0.25,
+        fontWeight: '400',
+    },
     xl: {
         fontSize: 17,
         letterSpacing: 0.25,
@@ -44,19 +49,30 @@ const typography: Typography = {
 };
 
 const spacing = {
-    small: 8,
-    medium: 16,
-    large: 24,
+    xs: 4,
+    sm: 8,
+    md: 16,
+    lg: 24,
 };
+
+const sharedColors = {
+    red: '#c44a5c',
+    green: '#5f7a2e',
+    blue: '#49b5c1'
+}
 
 export const lightTheme: Theme = {
     theme: 'light',
     colors: {
+        ...sharedColors,
         primary: '#fff',
         primary_dark: '#d8d8d8',
         primary_light: '#fff',
+        primary_highlight: '#bcbcbc',
         secondary: '#6c757d',
         border: '#e0e0e0',
+        borderLight: '#efefef',
+        borderDark: '#cecece',
         text: '#000',
         textGrey: '#606060',
         textDarkGrey: '#2d2d2d',
@@ -68,11 +84,15 @@ export const lightTheme: Theme = {
 export const darkTheme: Theme = {
     theme: 'dark',
     colors: {
+        ...sharedColors,
         primary: '#000',
         primary_dark: '#000',
         primary_light: '#262626',
+        primary_highlight: '#494949',
         secondary: '#6c757d',
         border: '#272727',
+        borderLight: '#4c4646',
+        borderDark: '#111111',
         text: '#fff',
         textGrey: '#afafaf',
         textDarkGrey: '#7a7a7a',

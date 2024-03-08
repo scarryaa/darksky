@@ -8,17 +8,24 @@ export interface Theme {
         primary: string;
         primary_dark: string;
         primary_light: string;
+        primary_highlight: string;
         secondary: string;
         border: string;
+        borderLight: string;
+        borderDark: string;
         text: string;
         textGrey: string;
         textDarkGrey: string;
+        red: string;
+        green: string;
+        blue: string;
     };
     typography: Typography;
     spacing: {
-        small: number;
-        medium: number;
-        large: number;
+        xs: number;
+        sm: number;
+        md: number;
+        lg: number;
     };
 }
 
@@ -31,6 +38,7 @@ export type Typography = Record<TypographyVariant, TextStyle>
 
 export type TypographyVariant =
     'header' |
+    'xxl' |
     'xl' |
     'lg' |
     'md-bold' |

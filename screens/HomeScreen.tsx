@@ -27,7 +27,6 @@ const HomeScreen = () => {
                             />
                         </li>
                     ))}
-
                 </ul>
             </BasicView>
         </View >

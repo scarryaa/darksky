@@ -8,8 +8,9 @@ import { agoLong } from "../../../util/time";
 import ReplyButton from "./controls/ReplyButton";
 import RepostButton from "./controls/RepostButton";
 import LikeButton from "./controls/LikeButton";
-import MoreButton from "./controls/ShareButton";
+import MoreButton from "./controls/MoreButton";
 import BookmarkButton from "./controls/BookmarkButton";
+import PostControls from "./controls/PostControls";
 
 type Props = {
     post: AppBskyFeedDefs.PostView;
@@ -42,8 +43,8 @@ const PostDetail = ({ post, style }: Props) => {
     return (
         <View style={[style, styles.postContainer, {
             borderColor: theme.colors.border,
-            paddingVertical: theme.spacing.small * 1.5,
-            paddingHorizontal: theme.spacing.small * 2
+            paddingVertical: theme.spacing.sm * 1.5,
+            paddingHorizontal: theme.spacing.md
         }]}>
             <View style={styles.postInner}>
                 {/* @ts-ignore */}
@@ -58,28 +59,22 @@ const PostDetail = ({ post, style }: Props) => {
                 </View>
             </View>
             {/* TODO refactor this so we dont need to do RT twice */}
-            <Text style={[styles.content, { marginBottom: theme.spacing.medium, marginTop: theme.spacing.small }]}>{rt.text}</Text>
-            <Text style={[{ color: theme.colors.textGrey }, theme.typography.md, { marginBottom: theme.spacing.medium }]}>
+            <Text style={[styles.content, { marginBottom: theme.spacing.md, marginTop: theme.spacing.sm }]}>{rt.text}</Text>
+            <Text style={[{ color: theme.colors.textGrey }, theme.typography.md, { marginBottom: theme.spacing.md }]}>
                 {agoLong(post.indexedAt)}
             </Text>
             {post.likeCount > 0 && <View style={[styles.likeContainer, {
                 borderTopColor: theme.colors.border,
                 borderBottomColor: theme.colors.border,
-                paddingVertical: theme.spacing.small,
-                paddingHorizontal: theme.spacing.small,
-                marginBottom: theme.spacing.medium,
+                paddingVertical: theme.spacing.sm,
+                paddingHorizontal: theme.spacing.sm,
+                marginBottom: theme.spacing.md,
             }]}>
-                <View style={[styles.likeText, { gap: theme.spacing.small / 1.25 }, theme.typography.md]}>
+                <View style={[styles.likeText, { gap: theme.spacing.sm / 1.25 }, theme.typography.md]}>
                     <Text style={theme.typography["md-bold"]}>{post.likeCount}</Text> <Text style={{ color: theme.colors.textGrey }}>like{post.likeCount > 1 ? 's' : ''}</Text>
                 </View>
             </View>}
-            <View style={[styles.postControls, { marginHorizontal: theme.spacing.small }]}>
-                <ReplyButton big={true} onReply={() => { }} replyCount={post.replyCount} />
-                <RepostButton big={true} onRepost={() => { }} repostCount={post.repostCount} />
-                <LikeButton big={true} onLike={() => { }} likeCount={post.likeCount} />
-                <BookmarkButton big={true} onBookmark={() => { }} bookmarked={false} />
-                <MoreButton big={true} onMore={() => { }} />
-            </View>
+            <PostControls big={true} post={post} />
         </View>
     );
 };

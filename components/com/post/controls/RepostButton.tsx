@@ -11,19 +11,20 @@ type RepostButtonProps = {
     onRepost: () => void;
 }
 
-const RepostButton = ({ repostCount, big, onRepost }: RepostButtonProps) => {
+const RepostButton = ({ repostCount, reposted, big, onRepost }: RepostButtonProps) => {
     const { theme } = useContext(ThemeContext);
 
     return (
-        <View style={[styles.repostButton, { gap: theme.spacing.small / 2 }]}>
+        <View style={[styles.repostButton, { gap: theme.spacing.xs }]}>
             <Ionicons
+                onPress={onRepost}
                 backgroundColor="transparent"
                 name={'repeat-outline'}
-                size={20}
-                color={theme.colors.textDarkGrey}
+                size={big ? 24 : 20}
+                color={reposted ? theme.colors.green : theme.colors.textDarkGrey}
             />
             {repostCount > 0 && <Text style={[
-                { color: theme.colors.textDarkGrey },
+                { color: reposted ? theme.colors.green : theme.colors.textDarkGrey },
                 theme.typography.lg
             ]}>{repostCount}</Text>}
         </View>
