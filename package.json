@@ -1,5 +1,6 @@
 {
   "name": "darksky",
+  "homepage": "https://scarryaa.github.io/darksky/",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
