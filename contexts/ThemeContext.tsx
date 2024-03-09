@@ -124,7 +124,7 @@ export const ThemeProvider = ({ children }: ThemeProviderProps): JSX.Element => 
           break;
         case 'system': {
           const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          themeToApply = prefersDarkMode ? darkTheme : lightTheme;
+          themeToApply = prefersDarkMode ? { ...darkTheme, theme: 'system' } : { ...lightTheme, theme: 'system' };
           localStorage.setItem('darksky-theme', 'system');
           break;
         }
