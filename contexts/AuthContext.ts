@@ -1,3 +1,6 @@
-import { createContext } from "react";
+import { createContext } from 'react';
 
-export const AuthContext = createContext({ signIn: null });
+export const AuthContext = createContext({
+  signIn: (_) => {},
+  signOut: () => {}
+});

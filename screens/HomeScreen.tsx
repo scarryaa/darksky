@@ -5,18 +5,18 @@ import { ThemeContext } from '../contexts/ThemeContext';
 import BasicView from '../components/BasicView';
 import { PostsContext } from '../contexts/PostContext';
 
-const HomeScreen = () => {
-    const { theme } = useContext(ThemeContext);
-    const { timeline, refreshPosts } = useContext(PostsContext);
+const HomeScreen = (): JSX.Element => {
+  const { theme } = useContext(ThemeContext);
+  const { timeline, refreshPosts } = useContext(PostsContext);
 
-    useEffect(() => {
-        refreshPosts();
-    }, []);
+  useEffect(() => {
+    void refreshPosts();
+  }, []);
 
-    return (
+  return (
         <View style={[styles.container, { backgroundColor: theme.colors.primary }]}>
             <BasicView>
-                {/* @ts-ignore */}
+                {/* @ts-expect-error ignore viewstyle error */}
                 <ul style={styles.postList}>
                     {timeline.map((post) => (
                         <li key={post.post.cid}>
@@ -30,31 +30,31 @@ const HomeScreen = () => {
                 </ul>
             </BasicView>
         </View >
-    );
+  );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        // @ts-ignore
-        overflow: 'auto',
-    },
-    postList: {
-        width: '100%',
-        // @ts-ignore
-        listStyle: 'none',
-        margin: 0,
-        padding: 0,
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 16,
-    },
-    subtitle: {
-        fontSize: 18,
-        marginBottom: 32,
-    },
+  container: {
+    flex: 1,
+    // @ts-expect-error web only
+    overflow: 'auto'
+  },
+  postList: {
+    width: '100%',
+    // @ts-expect-error web only
+    listStyle: 'none',
+    margin: 0,
+    padding: 0
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 16
+  },
+  subtitle: {
+    fontSize: 18,
+    marginBottom: 32
+  }
 });
 
 export default HomeScreen;

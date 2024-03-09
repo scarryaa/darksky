@@ -1,34 +1,34 @@
-import { useContext } from "react";
-import { StyleSheet, View, useWindowDimensions } from "react-native";
-import { ThemeContext } from "../contexts/ThemeContext";
+import { useContext } from 'react';
+import { StyleSheet, View, useWindowDimensions } from 'react-native';
+import { ThemeContext } from '../contexts/ThemeContext';
 
-type BasicViewProps = {
-    children?: React.ReactNode;
-    style?: any;
+interface BasicViewProps {
+  children?: React.ReactNode;
+  style?: any;
 }
 
-const BasicView: React.FC<BasicViewProps> = ({ children, style }) => {
-    const { theme } = useContext(ThemeContext);
-    const height = useWindowDimensions().height;
+const BasicView: React.FC<BasicViewProps> = ({ children, style }: BasicViewProps) => {
+  const { theme } = useContext(ThemeContext);
+  const height = useWindowDimensions().height;
 
-    return (
+  return (
         <View style={[{ borderColor: theme.colors.border }, { minHeight: height + 1 }, styles.basicViewContainer, style]}>
             {children}
         </View>
-    )
+  )
 };
 
 const styles = StyleSheet.create({
-    basicViewContainer: {
-        borderBottomWidth: 1,
-        borderRightWidth: 1,
-        borderLeftWidth: 1,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        maxWidth: 600,
-        minWidth: 600,
-        transform: 'translateX(-5%)',
-    },
+  basicViewContainer: {
+    borderBottomWidth: 1,
+    borderRightWidth: 1,
+    borderLeftWidth: 1,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    maxWidth: 600,
+    minWidth: 600,
+    transform: 'translateX(-5%)'
+  }
 });
 
 export default BasicView;

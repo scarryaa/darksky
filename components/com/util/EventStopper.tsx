@@ -1,23 +1,23 @@
 import React from 'react'
-import { View, ViewStyle } from 'react-native'
+import { View, type ViewStyle } from 'react-native'
 
-export function EventStopper({
-    children,
-    style,
-}: React.PropsWithChildren<{ style?: ViewStyle | ViewStyle[] }>) {
-    const stop = (e: any) => {
-        e.stopPropagation()
-    }
+export const EventStopper = ({
+  children,
+  style
+}: React.PropsWithChildren<{ style?: ViewStyle | ViewStyle[] }>): JSX.Element => {
+  const stop = (e: any): void => {
+    e.stopPropagation()
+  }
 
-    return (
+  return (
         <View
             onStartShouldSetResponder={_ => true}
             onTouchEnd={stop}
-            // @ts-ignore web only
+            // @ts-expect-error web only
             onClick={stop}
             onKeyDown={stop}
             style={style}>
             {children}
         </View>
-    )
+  )
 }

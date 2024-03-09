@@ -15,39 +15,40 @@ import ProfileScreen from './screens/ProfileScreen';
 
 const Stack = createStackNavigator();
 
-const App = () => {
+const App = (): JSX.Element => {
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
         case 'SIGN_IN':
           return {
             ...prevState,
-            isLoggedIn: true,
+            isLoggedIn: true
           };
         case 'SIGN_OUT':
           return {
             ...prevState,
-            isLoggedIn: false,
+            isLoggedIn: false
           };
       }
     },
     {
       isLoading: true,
-      isLoggedIn: false,
+      isLoggedIn: false
     });
 
-
-  const authContext = React.useMemo(
-    () => ({
-      signIn: async (data) => {
-        agent.login({ identifier: data.username, password: data.password })
-        dispatch({ type: 'SIGN_IN' });
-      },
-      signOut: () => dispatch({ type: 'SIGN_OUT' }),
-    }),
-    []
-  );
-
+  const authContext: { signIn: (_) => Promise<void>, signOut: () => void } = React.useMemo<{
+    signIn: (data: any) => Promise<void>;
+    signOut: () => void;
+  }>(
+      () => ({
+        signIn: async (data) => {
+          await agent.login({ identifier: data.username, password: data.password })
+          dispatch({ type: 'SIGN_IN' });
+        },
+        signOut: () => { dispatch({ type: 'SIGN_OUT' }); }
+      }),
+      []
+      );
 
   return (
     <NavigationContainer>
@@ -57,7 +58,8 @@ const App = () => {
             <CustomNavigationContainer sidebarVisible={state.isLoggedIn}>
               <AuthContext.Provider value={authContext}>
                 <Stack.Navigator screenOptions={{ headerShown: false }}>
-                  {state.isLoggedIn ? (
+                  {(state.isLoggedIn === true)
+                    ? (
                     <>
                       <Stack.Screen name="Home" getComponent={() => HomeScreen} />
                       <Stack.Screen name="Search" getComponent={() => SearchScreen} />
@@ -65,9 +67,10 @@ const App = () => {
                       <Stack.Screen name="PostThread" getComponent={() => PostThreadScreen} />
                       <Stack.Screen name="Profile" getComponent={() => ProfileScreen} />
                     </>
-                  ) : (
+                      )
+                    : (
                     <Stack.Screen name="Login" component={LoginScreen} />
-                  )}
+                      )}
                 </Stack.Navigator>
               </AuthContext.Provider>
             </CustomNavigationContainer>

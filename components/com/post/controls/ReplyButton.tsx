@@ -1,49 +1,49 @@
-import React, { useContext } from "react"
-import { StyleSheet, Pressable, View } from "react-native"
+import React, { useContext } from 'react'
+import { StyleSheet, Pressable, View } from 'react-native'
 import Ionicons from '@expo/vector-icons/Ionicons';
-import Text from "../../../Text";
-import { ThemeContext } from "../../../../contexts/ThemeContext";
-import { HITSLOP_10 } from "../../../../constants";
+import Text from '../../../Text';
+import { ThemeContext } from '../../../../contexts/ThemeContext';
+import { HITSLOP_10 } from '../../../../constants';
 
-type ReplyButtonProps = {
-    replyCount?: number;
-    big?: boolean;
-    onReply: () => void;
+interface ReplyButtonProps {
+  replyCount?: number;
+  big?: boolean;
+  onReply: () => void;
 }
 
-const ReplyButton = ({ replyCount, big, onReply }: ReplyButtonProps) => {
-    const { theme } = useContext(ThemeContext);
+const ReplyButton = ({ replyCount, big, onReply }: ReplyButtonProps): JSX.Element => {
+  const { theme } = useContext(ThemeContext);
 
-    return (
+  return (
         <View style={[styles.replyButton]}>
             <Pressable onPress={onReply} hitSlop={HITSLOP_10} style={[styles.pressable, { gap: theme.spacing.xs }]}>
                 <Ionicons
                     backgroundColor="transparent"
                     name={'chatbubble-outline'}
-                    size={big ? 20 : 16}
+                    size={(big ?? false) ? 20 : 16}
                     color={theme.colors.textDarkGrey}
                 />
-                {replyCount > 0 && <Text style={[
-                    { color: theme.colors.textDarkGrey },
-                    theme.typography.lg
+                {(replyCount != null) && replyCount > 0 && <Text style={[
+                  { color: theme.colors.textDarkGrey },
+                  theme.typography.lg
                 ]}>{replyCount}</Text>}
             </Pressable>
         </View>
-    );
+  );
 };
 
 const styles = StyleSheet.create({
-    replyButton: {
-        display: 'flex',
-        flexDirection: 'row',
-        flex: 1,
-        alignItems: 'center',
-    },
-    pressable: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
+  replyButton: {
+    display: 'flex',
+    flexDirection: 'row',
+    flex: 1,
+    alignItems: 'center'
+  },
+  pressable: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center'
+  }
 });
 
 export default ReplyButton;

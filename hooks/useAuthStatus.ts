@@ -1,7 +1,12 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-export const useAuthStatus = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+interface AuthStatusType {
+  isLoggedIn: boolean;
+  setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-    return { isLoggedIn, setIsLoggedIn };
+export const useAuthStatus = (): AuthStatusType => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  return { isLoggedIn, setIsLoggedIn };
 };
