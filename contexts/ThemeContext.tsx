@@ -1,9 +1,11 @@
-import { createContext, useState, ReactNode, useEffect } from 'react';
-import { lightTheme, darkTheme } from '../theme/themes';
+import { createContext, useState, ReactNode, useEffect, useMemo, useContext } from 'react';
+import { lightTheme, darkTheme, dimTheme } from '../theme/themes';
 import { TextStyle } from 'react-native';
 
+export type ThemeType = 'light' | 'dim' | 'dark' | 'system';
+
 export interface Theme {
-    theme: 'light' | 'dark' | 'dim',
+    theme: ThemeType;
     colors: {
         primary: string;
         primary_dark: string;
@@ -29,15 +31,19 @@ export interface Theme {
     };
 }
 
-interface ThemeContextType {
+type ThemeContextType = {
     theme: Theme;
-    toggleTheme: () => void;
+}
+
+type SetThemeContextType = {
+    setTheme: (_theme: ThemeType) => void;
 }
 
 export type Typography = Record<TypographyVariant, TextStyle>
 
 export type TypographyVariant =
     'header' |
+    'subheader' |
     'xxl' |
     'xl' |
     'lg' |
@@ -49,29 +55,92 @@ export type TypographyVariant =
 
 export const ThemeContext = createContext<ThemeContextType>({
     theme: lightTheme,
-    toggleTheme: () => { }
 });
+
+const SetThemeContext = createContext<SetThemeContextType>({} as SetThemeContextType)
 
 interface ThemeProviderProps {
     children: ReactNode;
 }
 
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
-    const [theme, setTheme] = useState(lightTheme);
+    const [theme, setTheme] = useState<Theme>(() => {
+        const storedTheme = localStorage.getItem('nyasky-theme');
+        const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const isSystemTheme = storedTheme === 'system';
+
+        if (storedTheme === 'dark' || (isSystemTheme && prefersDarkMode)) {
+            return {
+                ...darkTheme, theme: isSystemTheme ? 'system' : 'dark'
+            }
+        } else if (storedTheme === 'dim') {
+            return dimTheme;
+        } else {
+            return {
+                ...lightTheme, theme: isSystemTheme ? 'system' : 'light'
+            };
+        }
+    });
 
     useEffect(() => {
-        setTheme(localStorage.getItem('nyasky-theme') == 'dark' ? darkTheme : lightTheme || lightTheme)
-        localStorage.getItem
-    }, [])
+        const listener = (e: MediaQueryListEvent) => {
+            setTheme(e.matches ? darkTheme : lightTheme);
+        };
 
-    const toggleTheme = () => {
-        setTheme(theme === lightTheme ? darkTheme : lightTheme);
-        localStorage.setItem('nyasky-theme', theme === lightTheme ? 'dark' : 'light');
-    };
+        const mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
+        mediaQueryList.addEventListener('change', listener);
+        return () => {
+            mediaQueryList.removeEventListener('change', listener);
+        };
+    }, []);
+
+    const stateContextValue = useMemo(
+        () => ({
+            theme,
+        }),
+        [theme],
+    )
+
+    const themeContextValue = useMemo(() => ({
+        setTheme: (newTheme: string) => {
+            let themeToApply: Theme;
+
+            switch (newTheme) {
+                case 'light':
+                    themeToApply = lightTheme;
+                    break;
+                case 'dim':
+                    themeToApply = dimTheme;
+                    break;
+                case 'dark':
+                    themeToApply = darkTheme;
+                    break;
+                case 'system':
+                    const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    themeToApply = prefersDarkMode ? { ...darkTheme, theme: 'system' } : { ...lightTheme, theme: 'system' };
+                    break;
+                default:
+                    themeToApply = lightTheme;
+                    break;
+            }
+            setTheme(themeToApply);
+            localStorage.setItem('nyasky-theme', theme.theme);
+        },
+    }), []);
 
     return (
-        <ThemeContext.Provider value={{ theme, toggleTheme }}>
-            {children}
-        </ThemeContext.Provider>
+        <ThemeContext.Provider value={stateContextValue}>
+            <SetThemeContext.Provider value={themeContextValue}>
+                {children}
+            </SetThemeContext.Provider>
+        </ThemeContext.Provider >
     );
 };
+
+export const useTheme = () => {
+    return useContext(ThemeContext);
+}
+
+export const useSetTheme = () => {
+    return useContext(SetThemeContext);
+}

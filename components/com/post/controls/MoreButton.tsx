@@ -1,7 +1,6 @@
 import React, { useContext } from "react"
 import { View, StyleSheet } from "react-native"
 import Ionicons from '@expo/vector-icons/Ionicons';
-import Text from "../../../Text";
 import { ThemeContext } from "../../../../contexts/ThemeContext";
 import Dropdown, { MenuItem } from "../../dropdown/Dropdown";
 import { EventStopper } from "../../util/EventStopper";

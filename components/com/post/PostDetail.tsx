@@ -5,11 +5,6 @@ import { AppBskyFeedDefs, AppBskyFeedPost, RichText } from "@atproto/api";
 import Text from "../../Text";
 import Link from "../../Link";
 import { agoLong } from "../../../util/time";
-import ReplyButton from "./controls/ReplyButton";
-import RepostButton from "./controls/RepostButton";
-import LikeButton from "./controls/LikeButton";
-import MoreButton from "./controls/MoreButton";
-import BookmarkButton from "./controls/BookmarkButton";
 import PostControls from "./controls/PostControls";
 
 type Props = {
@@ -48,7 +43,7 @@ const PostDetail = ({ post, style }: Props) => {
         }]}>
             <View style={styles.postInner}>
                 {/* @ts-ignore */}
-                <Image source={{ uri: post.author.avatar }} style={[styles.avatar, { marginRight: theme.spacing.small }]} />
+                <Image source={{ uri: post.author.avatar }} style={[styles.avatar, { marginRight: theme.spacing.sm }]} />
                 <View style={styles.authorInfo}>
                     <Link style={[{ color: theme.colors.text }]} hoverUnderline={true} link={`/profile/${post.author.did}`}>
                         <Text style={styles.displayName}>{post.author.displayName == '' ? post.author.handle : post.author.displayName}</Text>

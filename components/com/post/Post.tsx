@@ -13,7 +13,7 @@ import { PostContext } from '../../../contexts/PostContext';
 type Props = {
     post: AppBskyFeedDefs.PostView;
     reason?: AppBskyFeedDefs.ReasonRepost | undefined;
-    style?: StyleProp<ViewStyle>
+    style?: StyleProp<ViewStyle>;
 }
 
 const Post = ({ post, reason, style }: Props) => {
@@ -80,13 +80,15 @@ const Post = ({ post, reason, style }: Props) => {
     };
 
     return (
-        <Link beforePressLogic={() => cachePostCallback(post.uri, post)} hoverUnderline={false} link={`/profile/${post.author.did}/post/${post.uri.split('/')[4]}`}
+        <Link beforePressLogic={() => cachePostCallback(post.uri, post)}
+            hoverUnderline={false}
+            link={`/profile/${post.author.did}/post/${post.uri.split('/')[4]}`}
             style={[style, {
                 borderColor: theme.colors.border,
                 paddingVertical: theme.spacing.sm * 1.2,
-                paddingHorizontal: theme.spacing.sm * 1.5,
+                paddingHorizontal: theme.spacing.md,
             }]}>
-            {AppBskyFeedDefs.isReasonRepost(reason) ? <Text style={[styles.repostTag, theme.typography['sm-bold']]}>Reposted by {reason.by.displayName || reason.by.handle}</Text> : <></>}
+            {AppBskyFeedDefs.isReasonRepost(reason) && <Text style={[styles.repostTag, theme.typography['sm-bold']]}>Reposted by {reason.by.displayName || reason.by.handle}</Text>}
             <View style={styles.container}>
                 <Image source={{ uri: post.author.avatar }} style={styles.avatar} />
 

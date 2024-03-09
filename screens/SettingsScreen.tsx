@@ -1,12 +1,14 @@
-import { useContext } from "react";
-import { View, StyleSheet, Button } from "react-native";
-import { ThemeContext } from "../contexts/ThemeContext";
+import { View, StyleSheet, TextStyle } from "react-native";
+import { useSetTheme, useTheme } from "../contexts/ThemeContext";
 import Text from "../components/Text";
 import BasicView from "../components/BasicView";
 import ViewHeader from "../components/ViewHeader";
+import SelectableButton from "../components/SelectableButton";
 
 const SettingsScreen = () => {
-    const { theme, toggleTheme } = useContext(ThemeContext);
+    const { theme } = useTheme();
+    const { setTheme } = useSetTheme();
+    const subheaderStyle: TextStyle = { marginBottom: theme.spacing.md };
 
     return (
         <View style={[styles.container, { backgroundColor: theme.colors.primary }]}>
@@ -15,8 +17,16 @@ const SettingsScreen = () => {
                     Settings
                 </Text>
             </ViewHeader>
-            <BasicView>
-                <Button title={"Change Theme"} onPress={toggleTheme}></Button>
+            <BasicView style={{ padding: theme.spacing.md }}>
+                <Text style={[subheaderStyle, theme.typography.subheader]}>
+                    Appearance
+                </Text>
+                <View style={styles.selectableButtons}>
+                    <SelectableButton left label='System' selected={theme.theme === 'system'} onSelect={() => setTheme('system')} />
+                    <SelectableButton label='Light' selected={theme.theme === 'light'} onSelect={() => setTheme('light')} />
+                    <SelectableButton label='Dim' selected={theme.theme === 'dim'} onSelect={() => setTheme('dim')} />
+                    <SelectableButton right label='Dark' selected={theme.theme === 'dark'} onSelect={() => setTheme('dark')} />
+                </View>
             </BasicView>
         </View>
     );
@@ -27,7 +37,11 @@ const styles = StyleSheet.create({
         // @ts-ignore
         overflow: 'auto',
         flex: 1,
-    }
+    },
+    selectableButtons: {
+        display: 'flex',
+        flexDirection: 'row'
+    },
 });
 
 export default SettingsScreen;

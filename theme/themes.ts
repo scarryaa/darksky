@@ -2,9 +2,14 @@ import type { Theme, Typography } from '../contexts/ThemeContext';
 
 const typography: Typography = {
     header: {
-        fontSize: 20,
+        fontSize: 22,
         letterSpacing: 0.25,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+    },
+    subheader: {
+        fontSize: 18,
+        letterSpacing: 0.25,
+        fontWeight: 'bold',
     },
     xxl: {
         fontSize: 18,
@@ -76,6 +81,26 @@ export const lightTheme: Theme = {
         text: '#000',
         textGrey: '#606060',
         textDarkGrey: '#2d2d2d',
+    },
+    spacing: spacing,
+    typography: typography,
+};
+
+export const dimTheme: Theme = {
+    theme: 'dim',
+    colors: {
+        ...sharedColors,
+        primary: '#181f26',
+        primary_dark: '#0e1216',
+        primary_light: '#28343F',
+        primary_highlight: '#344351',
+        secondary: '#6c757d',
+        border: '#273544',
+        borderLight: '#324356',
+        borderDark: '#1c2530',
+        text: '#fff',
+        textGrey: '#afafaf',
+        textDarkGrey: '#7a7a7a',
     },
     spacing: spacing,
     typography: typography,
