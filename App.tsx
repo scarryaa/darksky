@@ -11,6 +11,7 @@ import SettingsScreen from './screens/SettingsScreen';
 import { ThemeProvider } from './contexts/ThemeContext';
 import PostThreadScreen from './screens/PostThreadScreen';
 import { PostProvider, PostsProvider } from './contexts/PostContext';
+import ProfileScreen from './screens/ProfileScreen';
 
 const Stack = createStackNavigator();
 
@@ -62,6 +63,7 @@ const App = () => {
                       <Stack.Screen name="Search" getComponent={() => SearchScreen} />
                       <Stack.Screen name="Settings" getComponent={() => SettingsScreen} />
                       <Stack.Screen name="PostThread" getComponent={() => PostThreadScreen} />
+                      <Stack.Screen name="Profile" getComponent={() => ProfileScreen} />
                     </>
                   ) : (
                     <Stack.Screen name="Login" component={LoginScreen} />

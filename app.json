@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "nyasky",
-    "slug": "nyasky",
+    "name": "darksky",
+    "slug": "darksky",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

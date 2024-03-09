@@ -65,7 +65,7 @@ interface ThemeProviderProps {
 
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
     const [theme, setTheme] = useState<Theme>(() => {
-        const storedTheme = localStorage.getItem('nyasky-theme');
+        const storedTheme = localStorage.getItem('darksky-theme');
         const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
         const isSystemTheme = storedTheme === 'system';
 
@@ -124,7 +124,7 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
                     break;
             }
             setTheme(themeToApply);
-            localStorage.setItem('nyasky-theme', theme.theme);
+            localStorage.setItem('darksky-theme', theme.theme);
         },
     }), []);
 

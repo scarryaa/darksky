@@ -5,4 +5,5 @@ export const router = new Router({
     Search: '/search',
     Settings: '/settings',
     PostThread: '/profile/:name/post/:rkey',
+    Profile: '/profile/:name',
 });
