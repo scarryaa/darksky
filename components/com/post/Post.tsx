@@ -14,7 +14,7 @@ type WithoutUnknown<T> = {
   [K in keyof T as Exclude<K, keyof Record<string, unknown>>]: T[K];
 };
 
-  type ReasonRepostWithoutUnknown = WithoutUnknown<AppBskyFeedDefs.ReasonRepost>;
+type ReasonRepostWithoutUnknown = WithoutUnknown<AppBskyFeedDefs.ReasonRepost>;
 
 interface PostProps {
   post: AppBskyFeedDefs.PostView;
@@ -24,8 +24,6 @@ interface PostProps {
 
 const Post = ({ post, reason, style }: PostProps): JSX.Element => {
   const { theme } = useContext(ThemeContext);
-  const [replyAuthorDisplayName, setReplyAuthorDisplayName] = useState('');
-  const [replyAuthorHandle, setReplyAuthorHandle] = useState('');
   const { cachePost } = useContext(PostContext);
 
   const record = useMemo<AppBskyFeedPost.Record | undefined>(
@@ -36,8 +34,6 @@ const Post = ({ post, reason, style }: PostProps): JSX.Element => {
         : undefined,
     [post]
   );
-
-  let replyAuthorDid = '';
 
   const rt = useMemo(
     () =>
@@ -63,25 +59,6 @@ const Post = ({ post, reason, style }: PostProps): JSX.Element => {
     void detectFacets();
   }, [record?.text]);
 
-  useEffect(() => {
-    const getProfile = async (): Promise<void> => {
-      if ((record?.reply) != null) {
-        const urip = new AtUri(record.reply?.parent?.uri ?? record.reply.root.uri);
-        replyAuthorDid = urip.hostname;
-
-        try {
-          const res = await agent.getProfile({ actor: replyAuthorDid });
-          setReplyAuthorDisplayName(res.data.displayName ?? '');
-          setReplyAuthorHandle(res.data.handle);
-        } catch (error) {
-          console.error('Error fetching profile:', error);
-        }
-      }
-    };
-
-    void getProfile();
-  }, [record?.reply]);
-
   const cachePostCallback = (postId, postData): void => {
     cachePost(postId, postData);
   };
@@ -95,7 +72,7 @@ const Post = ({ post, reason, style }: PostProps): JSX.Element => {
               paddingVertical: theme.spacing.sm * 1.2,
               paddingHorizontal: theme.spacing.md
             }]}>
-            {AppBskyFeedDefs.isReasonRepost(reason) && <Text style={[styles.repostTag, theme.typography['sm-bold']]}>Reposted by {reason.by.displayName ?? reason.by.handle}</Text>}
+            {AppBskyFeedDefs.isReasonRepost(reason) && <Link link={`/profile/${post.author.did}`} hoverUnderline={false} style={[styles.repostTag, theme.typography['sm-bold']]}>Reposted by <Link link={`/profile/${post.author.did}`} hoverUnderline={true}>{reason.by.displayName ?? reason.by.handle}</Link></Link>}
             <View style={styles.container}>
                 <Image source={{ uri: post.author.avatar }} style={styles.avatar} />
 
@@ -111,10 +88,10 @@ const Post = ({ post, reason, style }: PostProps): JSX.Element => {
                         &nbsp;
                         <Text style={[theme.typography.sm, { color: theme.colors.textGrey }]}>{ago(post.indexedAt)}</Text>
                     </Text>
-                    {(replyAuthorDisplayName !== '') &&
+                    {(post.author.displayName !== '') &&
                         <View style={{ display: 'flex', flexDirection: 'row', gap: theme.spacing.xs, alignItems: 'center' }}>
                             <Ionicons size={14} name='arrow-undo' color={theme.colors.textGrey} />
-                            <Text style={{ color: theme.colors.textGrey, marginBottom: theme.spacing.sm / 4 }}>Reply to <Link link={`/profile/${replyAuthorHandle}`} hoverUnderline={true}>{replyAuthorDisplayName}</Link></Text>
+                            <Text style={{ color: theme.colors.textGrey, marginBottom: theme.spacing.sm / 4 }}>Reply to <Link link={`/profile/${post.author.handle}`} hoverUnderline={true}>{post.author.handle}</Link></Text>
                         </View>}
                     <Text style={[styles.content, { marginBottom: theme.spacing.md / 1.5, marginTop: theme.spacing.sm / 8 }]}>{rt?.text}</Text>
                     <PostControls big={false} post={post} />

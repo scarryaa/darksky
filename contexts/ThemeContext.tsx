@@ -51,7 +51,8 @@ export type TypographyVariant =
     'md' |
     'sm' |
     'sm-bold' |
-    'xs';
+    'xs' |
+    'xxs';
 
 export const ThemeContext = createContext<ThemeContextType>({
   theme: lightTheme

@@ -48,6 +48,16 @@ const CustomNavigationContainer = ({ children, sidebarVisible }: CustomNavigatio
                         navigation={navigation}
                     />
                     <NavigationButton
+                        active={true}
+                        activeName={'profile'}
+                        screenName={'Profile'}
+                        name="profile-outline"
+                        size={28}
+                        color={theme.colors.text}
+                        // @ts-expect-error TODO fix nav error
+                        navigation={navigation}
+                    />
+                    <NavigationButton
                         active={false}
                         activeName={'settings'}
                         screenName={'Settings'}

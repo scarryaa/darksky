@@ -50,6 +50,11 @@ const typography: Typography = {
     fontSize: 13,
     letterSpacing: 0.25,
     fontWeight: '400'
+  },
+  xxs: {
+    fontSize: 12,
+    letterSpacing: 0.25,
+    fontWeight: '400'
   }
 };
 

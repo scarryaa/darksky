@@ -1,37 +1,36 @@
-import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
-import { Text, Pressable, StyleProp, TextStyle } from "react-native";
-import { NavigationProp } from "../routes/types";
-import { router } from "../routes";
+import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
+import { Text, Pressable, type StyleProp, type TextStyle } from 'react-native';
+import { type NavigationProp } from '../routes/types';
+import { router } from '../routes';
 
-type LinkProps = {
-    link: string;
-    children: React.ReactNode;
-    style?: StyleProp<TextStyle>;
-    hoverUnderline: boolean;
-    beforePressLogic?: (...r) => void;
-};
+interface LinkProps {
+  link: string;
+  children: React.ReactNode;
+  style?: StyleProp<TextStyle>;
+  hoverUnderline: boolean;
+  beforePressLogic?: (...r) => void;
+}
 
 const Link: React.FC<LinkProps> = ({ link, children, style, hoverUnderline = true, beforePressLogic }) => {
-    const [isHovered, setIsHovered] = useState(false);
-    const navigation = useNavigation<NavigationProp>();
+  const [isHovered, setIsHovered] = useState(false);
+  const navigation = useNavigation<NavigationProp>();
 
-    const handlePressIn = () => {
-        setIsHovered(true);
-    };
+  const handlePressIn = (): void => {
+    setIsHovered(true);
+  };
 
-    const handlePressOut = () => {
-        setIsHovered(false);
-    };
+  const handlePressOut = (): void => {
+    setIsHovered(false);
+  };
 
-    const handlePress = () => {
-        // allows us to do stuff like caching the post
-        if (beforePressLogic) beforePressLogic();
-        // @ts-ignore
-        navigation.navigate(...router.matchPath(link));
-    };
+  const handlePress = (): void => {
+    // allows us to do stuff like caching the post
+    if (beforePressLogic != null) beforePressLogic();
+    navigation.navigate(...router.matchPath(link));
+  };
 
-    return (
+  return (
         <Pressable
             onHoverIn={handlePressIn}
             onHoverOut={handlePressOut}
@@ -41,7 +40,7 @@ const Link: React.FC<LinkProps> = ({ link, children, style, hoverUnderline = tru
                 {children}
             </Text>
         </Pressable>
-    );
+  );
 };
 
 export default Link;

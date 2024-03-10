@@ -124,7 +124,7 @@ const Dropdown = ({ children, style, items }: DropdownProps): JSX.Element => {
                       if (item.label === 'separator') {
                         return (
                                 <DropdownMenu.Separator
-                                key={item.label}
+                                key={index}
                                     // @ts-expect-error ignore viewstyle error
                                     style={StyleSheet.flatten([
                                       styles.separator,
@@ -135,7 +135,7 @@ const Dropdown = ({ children, style, items }: DropdownProps): JSX.Element => {
                       }
 
                       return (
-                            <DropdownMenuItem onSelect={item.onPress} key={item.label}>
+                            <DropdownMenuItem onSelect={item.onPress} key={index}>
                                 <Text>{item.label}</Text>
                                 <Ionicons color={theme.colors.text} name={item.icon} size={item.iconSize} />
                             </DropdownMenuItem>
