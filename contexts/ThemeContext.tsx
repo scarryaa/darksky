@@ -21,6 +21,8 @@ export interface Theme {
     red: string;
     green: string;
     blue: string;
+    white: string;
+    black: string;
   };
   typography: Typography;
   spacing: {
@@ -47,6 +49,7 @@ export type TypographyVariant =
     'xxl' |
     'xl' |
     'lg' |
+    'bold' |
     'md-bold' |
     'md' |
     'sm' |

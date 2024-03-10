@@ -26,6 +26,10 @@ const typography: Typography = {
     letterSpacing: 0.25,
     fontWeight: '400'
   },
+  bold: {
+    fontWeight: 'bold',
+    letterSpacing: 0.25
+  },
   'md-bold': {
     fontSize: 15,
     letterSpacing: 0.25,
@@ -68,7 +72,9 @@ const spacing = {
 const sharedColors = {
   red: '#c44a5c',
   green: '#5f7a2e',
-  blue: '#49b5c1'
+  blue: '#49b5c1',
+  white: '#fff',
+  black: '#000'
 }
 
 export const lightTheme: Theme = {

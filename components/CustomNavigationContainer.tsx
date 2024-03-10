@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import NavigationButton from './NavigationButton';
 import { ThemeContext } from '../contexts/ThemeContext';
 import { PostsContext } from '../contexts/PostContext';
+import { agent } from '../services/api';
 
 interface CustomNavigationContainerProps {
   children: React.ReactNode;
@@ -49,9 +50,10 @@ const CustomNavigationContainer = ({ children, sidebarVisible }: CustomNavigatio
                     />
                     <NavigationButton
                         active={true}
-                        activeName={'profile'}
+                        activeName={'person-circle'}
                         screenName={'Profile'}
-                        name="profile-outline"
+                        routeParams={{ name: agent.session?.did ?? '' }}
+                        name="person-circle-outline"
                         size={28}
                         color={theme.colors.text}
                         // @ts-expect-error TODO fix nav error

@@ -13,9 +13,10 @@ interface NavigationButtonProps {
   navigation: NavigationProp<ParamListBase>;
   screenName: string;
   doOnPress?: () => void;
+  routeParams?: Record<string, string>;
 }
 
-const NavigationButton = ({ name, active, activeName, size, color, navigation, screenName, doOnPress }: NavigationButtonProps): JSX.Element => {
+const NavigationButton = ({ name, active, activeName, size, color, navigation, screenName, doOnPress, routeParams }: NavigationButtonProps): JSX.Element => {
   const [isHovered, setIsHovered] = useState(false);
   const { theme } = useContext(ThemeContext);
 
@@ -29,7 +30,7 @@ const NavigationButton = ({ name, active, activeName, size, color, navigation, s
 
   const handleButtonPress = (): void => {
     if (doOnPress !== undefined) doOnPress();
-    navigation.navigate(screenName);
+    navigation.navigate(screenName, routeParams);
   };
 
   return (
