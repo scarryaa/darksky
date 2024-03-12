@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { Text as RNText, type TextProps } from 'react-native';
-import { ThemeContext, type TypographyVariant } from '../contexts/ThemeContext';
+import { ThemeContext, type TypographyVariant } from '../../contexts/ThemeContext';
 
 export type CustomTextProps = TextProps & {
   type?: TypographyVariant;

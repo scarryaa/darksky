@@ -5,7 +5,7 @@ import { ThemeContext } from '../contexts/ThemeContext';
 import BasicView from '../components/BasicView';
 import { PostsContext } from '../contexts/PostContext';
 import ViewHeader from '../components/ViewHeader';
-import Text from '../components/Text';
+import Text from '../components/com/Text';
 
 const HomeScreen = (): JSX.Element => {
   const { theme } = useContext(ThemeContext);

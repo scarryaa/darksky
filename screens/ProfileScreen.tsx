@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, StyleSheet, Image, Pressable, ScrollView, Animated, type StyleProp, type ViewStyle } from 'react-native';
 import { useTheme } from '../contexts/ThemeContext';
 import BasicView from '../components/BasicView';
@@ -6,7 +6,7 @@ import { type NativeStackScreenProps } from '@react-navigation/native-stack';
 import { type ProfileViewDetailed } from '@atproto/api/dist/client/types/app/bsky/actor/defs';
 import { agent } from '../services/api';
 import { AppBskyActorDefs, AppBskyFeedDefs, AppBskyGraphDefs } from '@atproto/api';
-import Text from '../components/Text';
+import Text from '../components/com/Text';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { type CommonNavParams } from '../routes/types';
 import TabSwitcher, { type Tab } from '../components/com/profile/TabSwitcher';
@@ -85,6 +85,7 @@ const ProfileScreen = ({ route }: ProfileScreenProps): JSX.Element => {
   const { name } = route.params;
   const isUserProfile = name === agent.session?.did;
   const [resetTabs, setResetTabs] = useState<boolean>(false);
+  const scrollView = useRef<ScrollView>(null)
 
   const [selectedTab, setSelectedTab] = useState<string>('posts');
 
@@ -192,11 +193,12 @@ const ProfileScreen = ({ route }: ProfileScreenProps): JSX.Element => {
   return (
         <View style={[styles.container, { backgroundColor: theme.colors.primary }]}>
            <ScrollView
-          scrollEventThrottle={16}
-          onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-            { useNativeDriver: false }
-          )}
+           ref={scrollView}
+           scrollEventThrottle={16}
+           onScroll={Animated.event(
+             [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+             { useNativeDriver: false }
+           )}
         >
            <BasicView>
               {/* @ts-expect-error ignore style issue */}
@@ -286,7 +288,7 @@ const ProfileScreen = ({ route }: ProfileScreenProps): JSX.Element => {
                   <Text>{profile?.description}</Text>
                 </View>
               </View>
-              <ProfileTabs resetTabs={resetTabs} onSelectTab={(tabKey) => { setSelectedTab(tabKey); }} lists={lists} feeds={feeds} profile={profile} defaultTab={'posts'} style={[styles.tabSwitcher, { marginTop: theme.spacing.lg, zIndex: 100, backgroundColor: theme.colors.primary }]} />
+              <ProfileTabs resetTabs={resetTabs} onSelectTab={(tabKey) => { setSelectedTab(tabKey); scrollView.current?.scrollTo({ y: 0, animated: false }) }} lists={lists} feeds={feeds} profile={profile} defaultTab={'posts'} style={[styles.tabSwitcher, { marginTop: theme.spacing.lg, zIndex: 100, backgroundColor: theme.colors.primary }]} />
               <View>
                 { selectedTab === 'posts' &&
                 <View>

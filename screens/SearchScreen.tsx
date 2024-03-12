@@ -1,5 +1,5 @@
 import { View, StyleSheet } from 'react-native';
-import Text from '../components/Text';
+import Text from '../components/com/Text';
 import ViewHeader from '../components/ViewHeader';
 import BasicView from '../components/BasicView';
 import { useContext } from 'react';

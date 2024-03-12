@@ -1,5 +1,5 @@
 import { Pressable, type StyleProp, type ViewStyle, StyleSheet } from 'react-native';
-import Text from './Text';
+import Text from './com/Text';
 import { ThemeContext } from '../contexts/ThemeContext';
 import { useContext } from 'react';
 

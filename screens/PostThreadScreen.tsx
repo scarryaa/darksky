@@ -1,7 +1,7 @@
 import { View, StyleSheet } from 'react-native';
 import BasicView from '../components/BasicView';
 import ViewHeader from '../components/ViewHeader';
-import Text from '../components/Text';
+import Text from '../components/com/Text';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { ThemeContext } from '../contexts/ThemeContext';
 import { agent } from '../services/api';

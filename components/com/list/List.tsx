@@ -1,6 +1,6 @@
 import { type AppBskyGraphDefs } from '@atproto/api';
 import { Image, View, StyleSheet, type StyleProp, type ViewStyle } from 'react-native'
-import Text from '../../Text';
+import Text from '../Text';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useTheme } from '../../../contexts/ThemeContext';
 import Link from '../../Link';

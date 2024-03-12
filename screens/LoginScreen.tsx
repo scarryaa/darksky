@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { agent } from '../services/api';
-import Text from '../components/Text';
+import Text from '../components/com/Text';
 import { AuthContext } from '../contexts/AuthContext';
 import { dimTheme } from '../theme/themes';
 

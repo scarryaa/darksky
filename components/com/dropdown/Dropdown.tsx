@@ -2,7 +2,7 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { Pressable, type View, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
 import { ThemeContext } from '../../../contexts/ThemeContext';
-import Text from '../../Text';
+import Text from '../Text';
 import { HITSLOP_10 } from '../../../constants';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { type IonIconName } from '../../../types/IoniconsTypes';

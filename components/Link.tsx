@@ -5,7 +5,7 @@ import { type NavigationProp } from '../routes/types';
 import { router } from '../routes';
 
 interface LinkProps {
-  link: string;
+  link: string | null;
   children: React.ReactNode;
   style?: StyleProp<TextStyle>;
   hoverUnderline: boolean;
@@ -27,7 +27,7 @@ const Link: React.FC<LinkProps> = ({ link, children, style, hoverUnderline = tru
   const handlePress = (): void => {
     // allows us to do stuff like caching the post
     if (beforePressLogic != null) beforePressLogic();
-    navigation.navigate(...router.matchPath(link));
+    if (link != null) navigation.navigate(...router.matchPath(link));
   };
 
   return (

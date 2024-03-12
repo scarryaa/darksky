@@ -1,6 +1,6 @@
 import { View, StyleSheet, type TextStyle } from 'react-native';
 import { useSetTheme, useTheme } from '../contexts/ThemeContext';
-import Text from '../components/Text';
+import Text from '../components/com/Text';
 import BasicView from '../components/BasicView';
 import ViewHeader from '../components/ViewHeader';
 import SelectableButton from '../components/SelectableButton';

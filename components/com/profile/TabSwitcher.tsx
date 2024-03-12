@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Pressable, type StyleProp, type ViewStyle } from 'react-native';
 import { useTheme } from '../../../contexts/ThemeContext';
-import Text from '../../Text';
+import Text from '../Text';
 
 export interface Tab {
   title: string;

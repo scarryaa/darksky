@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { View, StyleSheet, Pressable } from 'react-native'
 import Ionicons from '@expo/vector-icons/Ionicons';
-import Text from '../../../Text';
+import Text from '../../Text';
 import { ThemeContext } from '../../../../contexts/ThemeContext';
 import { HITSLOP_10 } from '../../../../constants';
 
