@@ -11,6 +11,9 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { type CommonNavParams } from '../routes/types';
 import TabSwitcher, { type Tab } from '../components/com/profile/TabSwitcher';
 import Tooltip from '../components/com/Tooltip';
+import Post from '../components/com/post/Post';
+import Feed from '../components/com/feed/Feed';
+import List from '../components/com/list/List';
 
 type ProfileScreenProps = NativeStackScreenProps<CommonNavParams, 'PostThread'>
 interface ProfileTabsProps {
@@ -19,9 +22,11 @@ interface ProfileTabsProps {
   profile: AppBskyActorDefs.ProfileViewDetailed | undefined;
   feeds: AppBskyFeedDefs.GeneratorView[] | null | undefined;
   lists: AppBskyGraphDefs.ListView[] | null | undefined;
+  onSelectTab: (tabKey: string) => void;
+  resetTabs: boolean;
 }
 
-const ProfileTabs = ({ style, profile, feeds, lists }: ProfileTabsProps): JSX.Element => {
+const ProfileTabs = ({ style, profile, feeds, lists, onSelectTab, resetTabs }: ProfileTabsProps): JSX.Element => {
   const isUserProfile = profile?.did === agent.session?.did;
 
   const tabs: Array<null | Tab> = [
@@ -64,7 +69,7 @@ const ProfileTabs = ({ style, profile, feeds, lists }: ProfileTabsProps): JSX.El
   ].filter(Boolean);
 
   return (
-    <TabSwitcher defaultTabKey='posts' style={style} tabs={tabs} />
+    <TabSwitcher resetTabs={resetTabs} defaultTabKey='posts' style={style} tabs={tabs} onSelectTab={onSelectTab} />
   )
 }
 
@@ -72,9 +77,16 @@ const ProfileScreen = ({ route }: ProfileScreenProps): JSX.Element => {
   const [profile, setProfile] = useState<ProfileViewDetailed>();
   const [feeds, setFeeds] = useState<AppBskyFeedDefs.GeneratorView[]>();
   const [lists, setLists] = useState<AppBskyGraphDefs.ListView[]>();
+  const [posts, setPosts] = useState<AppBskyFeedDefs.FeedViewPost[]>();
+  const [replies, setReplies] = useState<AppBskyFeedDefs.FeedViewPost[]>();
+  const [media, setMedia] = useState<AppBskyFeedDefs.FeedViewPost[]>();
+  const [likes, setLikes] = useState<AppBskyFeedDefs.FeedViewPost[]>();
   const { theme } = useTheme();
   const { name } = route.params;
   const isUserProfile = name === agent.session?.did;
+  const [resetTabs, setResetTabs] = useState<boolean>(false);
+
+  const [selectedTab, setSelectedTab] = useState<string>('posts');
 
   const scrollY = new Animated.Value(0);
 
@@ -128,14 +140,54 @@ const ProfileScreen = ({ route }: ProfileScreenProps): JSX.Element => {
       const lists = await agent.api.app.bsky.graph.getLists({ actor: name });
 
       if (AppBskyGraphDefs.validateListView(lists.data.lists[0]).success) {
+        console.log('set lists');
         setLists(lists.data.lists);
       }
     }
 
+    const getPosts = async (): Promise<void> => {
+      const posts = await agent.api.app.bsky.feed.getAuthorFeed({ actor: name, filter: 'posts_no_replies' });
+
+      if (AppBskyFeedDefs.validateFeedViewPost(posts.data.feed[0]).success) {
+        console.log('set feeds');
+        setPosts(posts.data.feed);
+      }
+    }
+
+    const getReplies = async (): Promise<void> => {
+      const replies = await agent.getAuthorFeed({ actor: name, filter: 'posts_with_replies' });
+
+      if (AppBskyFeedDefs.validateFeedViewPost(replies.data.feed[0]).success) {
+        setReplies(replies.data.feed);
+      }
+    }
+
+    const getMedia = async (): Promise<void> => {
+      const media = await agent.getAuthorFeed({ actor: name, filter: 'posts_with_media' });
+
+      if (AppBskyFeedDefs.validateFeedViewPost(media.data.feed[0]).success) {
+        setMedia(media.data.feed);
+      };
+    }
+
+    const getLikes = async (): Promise<void> => {
+      const likes = await agent.getActorLikes({ actor: name });
+
+      if (AppBskyFeedDefs.validateFeedViewPost(likes.data.feed[0]).success) {
+        setLikes(likes.data.feed);
+      };
+    }
+
+    setSelectedTab('posts');
+    setResetTabs(!resetTabs);
     void getLists();
     void getProfile();
     void getFeeds();
-  }, [name])
+    void getPosts();
+    void getReplies();
+    void getMedia();
+    void getLikes();
+  }, [name]);
 
   return (
         <View style={[styles.container, { backgroundColor: theme.colors.primary }]}>
@@ -234,9 +286,36 @@ const ProfileScreen = ({ route }: ProfileScreenProps): JSX.Element => {
                   <Text>{profile?.description}</Text>
                 </View>
               </View>
-              <ProfileTabs lists={lists} feeds={feeds} profile={profile} defaultTab={'posts'} style={[styles.tabSwitcher, { marginTop: theme.spacing.lg, zIndex: 100 }]} />
-              {/* @ts-expect-error ignore style issue */}
-              <View style={{ height: '100vh' }}></View>
+              <ProfileTabs resetTabs={resetTabs} onSelectTab={(tabKey) => { setSelectedTab(tabKey); }} lists={lists} feeds={feeds} profile={profile} defaultTab={'posts'} style={[styles.tabSwitcher, { marginTop: theme.spacing.lg, zIndex: 100, backgroundColor: theme.colors.primary }]} />
+              <View>
+                { selectedTab === 'posts' &&
+                <View>
+                  {posts?.map((post, index) => (
+                      <Post style={{ borderColor: theme.colors.border, borderTopWidth: index === 0 ? 1 : 0, borderBottomWidth: index === posts.length - 1 && post.replyCount === 0 ? 0 : 1 }} key={index} post={post.post} reason={post.reason} />
+                  ))}
+                </View>}
+                { selectedTab === 'replies' &&
+                  replies?.map((post, index) => (
+                    <Post style={{ borderColor: theme.colors.border, borderTopWidth: index === 0 ? 1 : 0, borderBottomWidth: index === replies.length - 1 && post.replyCount === 0 ? 0 : 1 }} key={index} post={post.post} reason={post.reason} />
+                  ))
+                }
+                { selectedTab === 'media' &&
+                  media?.map((post, index) => (
+                    <Post style={{ borderColor: theme.colors.border, borderTopWidth: index === 0 ? 1 : 0, borderBottomWidth: index === media.length - 1 && post.replyCount === 0 ? 0 : 1 }} key={index} post={post.post} reason={post.reason} />
+                  ))}
+                { selectedTab === 'likes' &&
+                  likes?.map((post, index) => (
+                    <Post style={{ borderColor: theme.colors.border, borderTopWidth: index === 0 ? 1 : 0, borderBottomWidth: index === likes.length - 1 && post.replyCount === 0 ? 0 : 1 }} key={index} post={post.post} reason={post.reason} />
+                  ))}
+                { selectedTab === 'feeds' &&
+                  feeds?.map((feed, index) => (
+                    <Feed style={{ borderColor: theme.colors.border, borderTopWidth: index === 0 ? 1 : 0, borderBottomWidth: index === feeds.length - 1 ? 0 : 1 }} feed={feed} key={index}/>
+                  ))}
+                { selectedTab === 'lists' &&
+                  lists?.map((list, index) => (
+                    <List style={{ borderColor: theme.colors.border, borderTopWidth: index === 0 ? 1 : 0, borderBottomWidth: index === lists.length - 1 ? 0 : 1 }} list={list} key={index}/>
+                  ))}
+              </View>
             </BasicView>
             </ScrollView>
         </View>

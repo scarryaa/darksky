@@ -24,7 +24,7 @@ interface PostProps {
 
 const Post = ({ post, reason, style }: PostProps): JSX.Element => {
   const { theme } = useContext(ThemeContext);
-  const { cachePost } = useContext(PostContext);
+  const { cachePost, cacheReplyAuthor, getReplyAuthorFromCache } = useContext(PostContext);
 
   const record = useMemo<AppBskyFeedPost.Record | undefined>(
     () =>
@@ -45,6 +45,34 @@ const Post = ({ post, reason, style }: PostProps): JSX.Element => {
         : undefined,
     [record]
   );
+
+  const [replyAuthorUsername, setReplyAuthorUsername] = useState<string>();
+  const [replyAuthorDid] = useState<string | null>(record?.reply != null ? new AtUri(record?.reply?.parent?.uri ?? '').hostname : null);
+
+  useEffect(() => {
+    const getReplyAuthorUsername = async (): Promise<void> => {
+      try {
+        if (replyAuthorDid != null) {
+          // try to get the info from the cache first
+          const res = getReplyAuthorFromCache(replyAuthorDid);
+
+          if (res != null) {
+            setReplyAuthorUsername(res);
+          } else if (replyAuthorDid != null) {
+            // if not found, get the profile and cache the username
+            // TODO this doesn't work. fix
+            const res2 = await agent.getProfile({ actor: replyAuthorDid });
+            cacheReplyAuthor(replyAuthorDid, res2.data.displayName ?? 'NAME_NOT_FOUND');
+            setReplyAuthorUsername(res2.data.displayName);
+          }
+        }
+      } catch (error: any) {
+        console.log('unable to fetch profile: ', error);
+      }
+    }
+
+    void getReplyAuthorUsername();
+  }, [replyAuthorDid]);
 
   useEffect(() => {
     const detectFacets = async (): Promise<void> => {
@@ -74,7 +102,9 @@ const Post = ({ post, reason, style }: PostProps): JSX.Element => {
             }]}>
             {AppBskyFeedDefs.isReasonRepost(reason) && <Link link={`/profile/${post.author.did}`} hoverUnderline={false} style={[styles.repostTag, theme.typography['sm-bold']]}>Reposted by <Link link={`/profile/${post.author.did}`} hoverUnderline={true}>{reason.by.displayName ?? reason.by.handle}</Link></Link>}
             <View style={styles.container}>
+              <Link hoverUnderline={false} link={`/profile/${post.author.did}`}>
                 <Image source={{ uri: post.author.avatar }} style={styles.avatar} />
+              </Link>
 
                 <View style={styles.postContent}>
                     <Text>
@@ -88,10 +118,10 @@ const Post = ({ post, reason, style }: PostProps): JSX.Element => {
                         &nbsp;
                         <Text style={[theme.typography.sm, { color: theme.colors.textGrey }]}>{ago(post.indexedAt)}</Text>
                     </Text>
-                    {(post.author.displayName !== '') &&
+                    {(post.author.displayName !== '') && (AppBskyFeedPost.isRecord(post.record) && ((post.record.reply?.parent.uri) != null)) &&
                         <View style={{ display: 'flex', flexDirection: 'row', gap: theme.spacing.xs, alignItems: 'center' }}>
                             <Ionicons size={14} name='arrow-undo' color={theme.colors.textGrey} />
-                            <Text style={{ color: theme.colors.textGrey, marginBottom: theme.spacing.sm / 4 }}>Reply to <Link link={`/profile/${post.author.handle}`} hoverUnderline={true}>{post.author.handle}</Link></Text>
+                            <Text style={{ color: theme.colors.textGrey, marginBottom: theme.spacing.sm / 4 }}>Reply to <Link link={`/profile/${replyAuthorDid}`} hoverUnderline={true}>{replyAuthorUsername}</Link></Text>
                         </View>}
                     <Text style={[styles.content, { marginBottom: theme.spacing.md / 1.5, marginTop: theme.spacing.sm / 8 }]}>{rt?.text}</Text>
                     <PostControls big={false} post={post} />

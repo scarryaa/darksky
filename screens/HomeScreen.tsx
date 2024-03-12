@@ -4,6 +4,8 @@ import Post from '../components/com/post/Post';
 import { ThemeContext } from '../contexts/ThemeContext';
 import BasicView from '../components/BasicView';
 import { PostsContext } from '../contexts/PostContext';
+import ViewHeader from '../components/ViewHeader';
+import Text from '../components/Text';
 
 const HomeScreen = (): JSX.Element => {
   const { theme } = useContext(ThemeContext);
@@ -15,13 +17,18 @@ const HomeScreen = (): JSX.Element => {
 
   return (
         <View style={[styles.container, { backgroundColor: theme.colors.primary }]}>
+          <ViewHeader showBackButton={false}>
+                <Text style={theme.typography.header}>
+                    Home
+                </Text>
+            </ViewHeader>
             <BasicView>
                 {/* @ts-expect-error ignore viewstyle error */}
                 <ul style={styles.postList}>
-                    {timeline.map((post) => (
-                        <li key={post.post.cid}>
+                    {timeline.map((post, index) => (
+                        <li key={post.post.cid + index}>
                             <Post
-                                style={{ borderTopWidth: 1 }}
+                                style={{ borderTopWidth: index !== 0 ? 1 : 0 }}
                                 post={post.post}
                                 reason={post.reason}
                             />
